@@ -1,0 +1,71 @@
+/*
+Theme Name: Adult Child
+Template: affiliate-base
+Description: アダルト系アフィリエイトサイト用の子テーマ(年齢確認ゲート付き)。
+Version: 0.1.0
+Text Domain: adult-child
+*/
+
+:root {
+	/*
+	 * 配色の考え方(心理学ベース)
+	 * - 背景: 青紫寄りの深い夜色。肌色(暖色)の補色側なので写真の肌が最も映える。
+	 *         夜間・スマホ・プライベートな閲覧環境で眩しくなく、「人目のない夜」の没入感を作る。
+	 * - 主アクセント(CTA専用): ホットピンク/マゼンタ。赤系は性的魅力の知覚を高める("Romantic red"効果)。
+	 *         ボタン以外では使わず、画面内で唯一の色にしてクリック先を一目で分からせる(孤立効果)。
+	 * - セール: 赤橙。緊急性・希少性(今だけ安い)を知らせる専用色。
+	 * - PICK UP/評価: シャンパンゴールド。特別感・厳選感(プレミアム)を演出。
+	 * - 文字: わずかに暖かい白。真っ白より目に優しく、肌の暖かさと調和する。
+	 */
+	--c-bg: #120f1a;
+	--c-surface: #1c1826;
+	--c-text: #f4eef2;
+	--c-muted: #a39cb0;
+	--c-border: #2d2738;
+	--c-primary: #ff3d81;
+	--c-primary-text: #ffffff;
+	--c-accent: #ff3d81;
+	--c-sale: #ff5a2e;
+	--c-premium: #e9c27a;
+	--c-header-bg: #120f1a;
+	--c-header-text: #f4eef2;
+}
+
+.card { background: var(--c-surface); }
+.atk-table tbody th { color: var(--c-text); }
+.hero .hero-title { color: #fff; }
+.site-title a { display: inline-block; color: var(--c-text); letter-spacing: .02em; }
+.site-title a::first-letter { color: var(--c-primary); }
+/* イチオシ女優の背後に、間接照明のような暖色のにじみ(親密さ・夜のムード) */
+.fz-featured { position: relative; isolation: isolate; }
+.fz-featured::before { content: ""; position: absolute; inset: -40px -16px; z-index: -1; pointer-events: none;
+	background: radial-gradient(60% 55% at 25% 40%, rgb(255 140 90 / .10), transparent 70%),
+	            radial-gradient(50% 50% at 80% 60%, rgb(255 61 129 / .08), transparent 70%); }
+.fz-card { box-shadow: 0 10px 30px rgb(0 0 0 / .35); }
+.fz-card-photo::after { content: ""; position: absolute; inset: auto 0 0; height: 35%; background: linear-gradient(transparent, rgb(18 15 26 / .55)); }
+.site-header { border-bottom-color: var(--c-border); position: sticky; top: 0; z-index: 50; }
+.global-nav { width: 100%; overflow-x: auto; }
+.global-nav ul { flex-wrap: nowrap; white-space: nowrap; }
+
+/* ヘッダー検索 */
+.header-search { display: flex; gap: 8px; width: 100%; }
+.header-search input { flex: 1; min-width: 0; background: var(--c-surface); border: 1px solid var(--c-border); color: var(--c-text); border-radius: 999px; padding: 10px 16px; font-size: .95rem; }
+.header-search button { background: var(--c-primary); color: #fff; border: 0; border-radius: 999px; padding: 0 20px; font-weight: 700; cursor: pointer; }
+.age-badge { display: inline-block; border: 2px solid var(--c-primary); color: var(--c-primary); font-weight: 700; border-radius: 50%; width: 2.6em; height: 2.6em; line-height: 2.3em; text-align: center; font-size: .8rem; }
+
+/* 年齢確認ゲート */
+.age-gate { position: fixed; inset: 0; z-index: 9999; background: rgb(8 8 10 / .97); display: grid; place-items: center; padding: 16px; }
+.age-gate[hidden] { display: none; }
+.age-gate-box { max-width: 440px; width: 100%; background: var(--c-surface); border: 1px solid var(--c-border); border-radius: var(--radius); padding: 32px 24px; text-align: center; }
+.age-gate-box h2 { margin: 12px 0 8px; font-size: 1.25rem; }
+.age-gate-box p { color: var(--c-muted); font-size: .9rem; }
+.age-gate-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+.age-gate-actions button, .age-gate-actions a { display: block; padding: 12px; border-radius: 999px; font-weight: 700; font-size: 1rem; text-decoration: none; cursor: pointer; border: 0; font-family: inherit; }
+.age-gate-yes { background: var(--c-primary); color: #fff; }
+.age-gate-no { background: transparent; color: var(--c-muted); border: 1px solid var(--c-border) !important; }
+html.age-gate-open { overflow: hidden; }
+
+/* トップはイチオシ女優を最上部に見せるため、サイト名エリアをコンパクトに */
+.home .hero { padding: 16px 0 0; text-align: left; }
+.home .hero .hero-title { font-size: 1rem; color: var(--c-muted); font-weight: 500; }
+.home .hero p { font-size: .8rem; }

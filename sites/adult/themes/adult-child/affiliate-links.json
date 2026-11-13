@@ -1,0 +1,36 @@
+{
+  "adult-a": {
+    "name": "動画配信サービスA",
+    "url": "https://example.com/aff/adult-a",
+    "rating": 4.5,
+    "catch": "TODO: 一言キャッチコピー",
+    "features": ["TODO: 特徴1", "TODO: 特徴2", "TODO: 特徴3"],
+    "price": "TODO",
+    "bonus": "TODO",
+    "devices": "PC / スマホ / TV",
+    "payments": "TODO",
+    "cta": "動画配信サービスAの公式サイトを見る"
+  },
+  "adult-b": {
+    "name": "動画配信サービスB",
+    "url": "https://example.com/aff/adult-b",
+    "rating": 4.2,
+    "catch": "TODO",
+    "features": ["TODO: 特徴1", "TODO: 特徴2"],
+    "price": "TODO",
+    "bonus": "TODO",
+    "devices": "PC / スマホ",
+    "payments": "TODO"
+  },
+  "adult-c": {
+    "name": "サービスC",
+    "url": "https://example.com/aff/adult-c",
+    "rating": 3.9,
+    "catch": "TODO",
+    "features": ["TODO: 特徴1", "TODO: 特徴2"],
+    "price": "TODO",
+    "bonus": "TODO",
+    "devices": "TODO",
+    "payments": "TODO"
+  }
+}

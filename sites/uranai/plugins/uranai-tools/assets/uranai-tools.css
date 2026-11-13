@@ -1,0 +1,73 @@
+/* Uranai Tools – テーマの CSS 変数を利用 */
+.ut-ranking, .ut-kyusei { margin: 32px 0 48px; }
+.home .ut-ranking { margin-top: 0; }
+.ut-title { font-size: 1.35rem; margin: 0; }
+.ut-ranking-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.ut-date { margin: 0; font-size: .85rem; color: var(--c-muted, #777); }
+.ut-note { font-size: .78rem; color: var(--c-muted, #777); }
+.ut-symbol { font-family: "Segoe UI Symbol", "Apple Symbols", "Noto Sans Symbols", sans-serif; }
+
+/* 星座ジャンプナビ */
+.ut-sign-nav { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; margin-bottom: 16px; }
+.ut-sign-nav a { display: flex; flex-direction: column; align-items: center; padding: 6px 2px; border: 1px solid var(--c-border, #ddd); border-radius: 8px; color: var(--c-text, #222); text-decoration: none; font-size: .72rem; background: var(--c-bg, #fff); }
+.ut-sign-nav .ut-symbol { font-size: 1.2rem; color: var(--c-primary, #5f3dc4); line-height: 1.3; }
+@media (min-width: 800px) { .ut-sign-nav { grid-template-columns: repeat(12, 1fr); } }
+
+/* ランキング */
+.ut-rank-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+@media (min-width: 900px) { .ut-rank-list { grid-template-columns: repeat(2, 1fr); } .ut-rank-1 { grid-column: 1 / -1; } }
+.ut-rank { display: flex; gap: 14px; padding: 16px; border: 1px solid var(--c-border, #ddd); border-radius: var(--radius, 10px); background: var(--c-bg, #fff); scroll-margin-top: 16px; }
+.ut-rank-badge { flex: none; width: 52px; height: 52px; border-radius: 50%; display: grid; place-content: center; text-align: center; background: var(--c-surface, #eee); color: var(--c-text, #222); line-height: 1; }
+.ut-rank-num { font-size: 1.4rem; font-weight: 700; }
+.ut-rank-unit { font-size: .65rem; }
+.ut-rank-1 { border: 2px solid #c9a227; background: linear-gradient(135deg, #fffaf0, var(--c-bg, #fff) 60%); }
+.ut-rank-1 .ut-rank-badge { background: linear-gradient(135deg, #f3d36b, #c9a227); color: #3b2a00; width: 60px; height: 60px; }
+.ut-rank-2 .ut-rank-badge { background: linear-gradient(135deg, #e6e8ec, #a7adb7); color: #22262d; }
+.ut-rank-3 .ut-rank-badge { background: linear-gradient(135deg, #e9b98d, #b06d3b); color: #2d1606; }
+.ut-rank-main { flex: 1; min-width: 0; }
+.ut-rank-sign { margin: 0 0 4px; font-size: 1.1rem; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.ut-rank-sign .ut-symbol { color: var(--c-primary, #5f3dc4); }
+.ut-rank-sign small { font-size: .72rem; color: var(--c-muted, #777); font-weight: 400; }
+.ut-mine-label { font-style: normal; font-size: .7rem; background: var(--c-accent, #d6336c); color: #fff; padding: 1px 8px; border-radius: 999px; }
+.ut-rank.is-mine { outline: 3px solid var(--c-accent, #d6336c); outline-offset: 2px; }
+.ut-rank-text { margin: 0 0 8px; font-size: .92rem; line-height: 1.75; }
+.ut-sub { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 6px; font-size: .8rem; }
+.ut-sub div { display: flex; gap: 6px; }
+.ut-sub dt { color: var(--c-muted, #777); }
+.ut-sub dd { margin: 0; }
+.ut-stars { color: #e0a419; letter-spacing: 1px; }
+.ut-stars-off { color: var(--c-border, #ddd); }
+.ut-lucky { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; font-size: .8rem; }
+.ut-lucky b { font-weight: 400; color: var(--c-muted, #777); margin-right: 6px; }
+.ut-swatch { display: inline-block; width: .9em; height: .9em; border-radius: 50%; vertical-align: -1px; margin-right: 4px; border: 1px solid rgb(0 0 0 / .15); }
+.ut-advice { margin: 8px 0 0; font-size: .82rem; background: var(--c-surface, #f3f3f3); padding: 8px 10px; border-radius: 6px; }
+.ut-advice b { display: block; font-size: .72rem; color: var(--c-primary, #5f3dc4); }
+
+/* 九星気学 */
+.ut-kyusei { background: var(--c-surface, #f5f5f5); border-radius: var(--radius, 10px); padding: 24px 20px; }
+.ut-lead { margin: 6px 0 16px; font-size: .9rem; color: var(--c-muted, #666); }
+.ut-form { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ut-form label { font-weight: 700; font-size: .9rem; }
+.ut-form input { flex: 1 1 180px; min-width: 0; font-size: 1rem; padding: 10px 12px; border: 1px solid var(--c-border, #ccc); border-radius: 8px; background: var(--c-bg, #fff); color: var(--c-text, #222); font-family: inherit; }
+.ut-form button { flex: 1 1 100%; padding: 13px; border: 0; border-radius: 999px; background: var(--c-accent, #d6336c); color: #fff; font-weight: 700; font-size: 1rem; cursor: pointer; font-family: inherit; }
+@media (min-width: 600px) { .ut-form button { flex: 0 0 auto; padding: 11px 28px; } }
+.ut-error { color: #c92a2a; font-size: .85rem; }
+.ut-result { margin-top: 24px; background: var(--c-bg, #fff); border-radius: var(--radius, 10px); padding: 20px; }
+.ut-result h3 { font-size: 1.05rem; margin: 24px 0 8px; border-bottom: 2px solid var(--c-border, #ddd); padding-bottom: 4px; }
+.ut-result p { font-size: .92rem; }
+.ut-honmei { text-align: center; padding: 20px 12px; border-radius: var(--radius, 10px); background: radial-gradient(ellipse at top, #4b2a83, #2b1a4a 75%); color: #f6efff; position: relative; overflow: hidden; }
+.ut-honmei::before { content: ""; position: absolute; width: 140px; height: 140px; border-radius: 50%; left: 50%; top: -70px; translate: -50% 0; background: var(--star); opacity: .35; filter: blur(30px); }
+.ut-honmei p { margin: 0; position: relative; }
+.ut-result .ut-honmei-label { font-size: .8rem; opacity: .8; }
+.ut-result .ut-honmei-name { font-family: var(--font-heading, serif); font-size: 2rem; font-weight: 700; letter-spacing: .1em; }
+.ut-result .ut-honmei-sub { font-size: .82rem; opacity: .85; }
+.ut-getsu b { display: block; font-size: .8rem; color: var(--c-primary, #5f3dc4); }
+.ut-fortune h3 { display: flex; align-items: center; gap: 8px; }
+.ut-fortune-theme { font-size: .72rem; background: var(--c-primary, #5f3dc4); color: #fff; padding: 2px 10px; border-radius: 999px; font-weight: 400; }
+.ut-fortune-stars { margin: 0 0 4px; font-size: 1.1rem; }
+.ut-compat { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.ut-compat li { background: var(--c-surface, #eee); padding: 4px 12px; border-radius: 999px; font-size: .85rem; }
+.ut-today-link { margin-top: 20px; padding: 12px; border: 1px dashed var(--c-border, #ccc); border-radius: 8px; }
+.ut-upsell { margin-top: 24px; padding: 18px; border-radius: var(--radius, 10px); border: 2px solid var(--c-accent, #d6336c); text-align: center; }
+.ut-upsell-title { font-weight: 700; font-size: 1.05rem !important; margin: 0 0 4px; }
+.ut-upsell p { margin: 0 0 4px; }
