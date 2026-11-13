@@ -7,21 +7,30 @@ Text Domain: adult-child
 */
 
 :root {
-	--c-bg: #141417;
-	--c-surface: #1f1f24;
+	--c-bg: #121215;
+	--c-surface: #1c1c21;
 	--c-text: #ececf1;
 	--c-muted: #9a9aa8;
-	--c-border: #2e2e36;
-	--c-primary: #e64980;
+	--c-border: #2c2c33;
+	--c-primary: #ef5f55;
 	--c-primary-text: #ffffff;
-	--c-accent: #e64980;
-	--c-header-bg: #0c0c0e;
+	--c-accent: #ef5f55;
+	--c-header-bg: #121215;
 	--c-header-text: #ffffff;
 }
 
 .card { background: var(--c-surface); }
 .atk-table tbody th { color: var(--c-text); }
 .hero h1 { color: #fff; }
+.site-title a { color: var(--c-primary); letter-spacing: .02em; }
+.site-header { border-bottom-color: var(--c-border); position: sticky; top: 0; z-index: 50; }
+.global-nav { width: 100%; overflow-x: auto; }
+.global-nav ul { flex-wrap: nowrap; white-space: nowrap; }
+
+/* ヘッダー検索 */
+.header-search { display: flex; gap: 8px; width: 100%; }
+.header-search input { flex: 1; min-width: 0; background: var(--c-surface); border: 1px solid var(--c-border); color: var(--c-text); border-radius: 999px; padding: 10px 16px; font-size: .95rem; }
+.header-search button { background: var(--c-primary); color: #fff; border: 0; border-radius: 999px; padding: 0 20px; font-weight: 700; cursor: pointer; }
 .age-badge { display: inline-block; border: 2px solid var(--c-primary); color: var(--c-primary); font-weight: 700; border-radius: 50%; width: 2.6em; height: 2.6em; line-height: 2.3em; text-align: center; font-size: .8rem; }
 
 /* 年齢確認ゲート */
@@ -35,3 +44,8 @@ Text Domain: adult-child
 .age-gate-yes { background: var(--c-primary); color: #fff; }
 .age-gate-no { background: transparent; color: var(--c-muted); border: 1px solid var(--c-border) !important; }
 html.age-gate-open { overflow: hidden; }
+
+/* トップはイチオシ女優を最上部に見せるため、サイト名エリアをコンパクトに */
+.home .hero { padding: 16px 0 0; text-align: left; }
+.home .hero h1 { font-size: 1rem; color: var(--c-muted); font-weight: 500; }
+.home .hero p { font-size: .8rem; }

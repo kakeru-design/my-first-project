@@ -13,6 +13,7 @@ shared/
 sites/
   uranai/themes/uranai-child/        占いサイト用の子テーマ(紫×金)
   adult/themes/adult-child/          アダルトサイト用の子テーマ(ダーク・年齢確認ゲート)
+  adult/plugins/fanza-connector/     FANZA API連携(イチオシ女優・作品一覧・検索)
 docs/                                各サイトのコンテンツ計画
 docker-compose.yml                   ローカル確認用
 ```
@@ -30,6 +31,23 @@ docker compose up -d
 - `shared/mu-plugins/affiliate-toolkit.php` → `wp-content/mu-plugins/`
 - `shared/themes/affiliate-base/` → `wp-content/themes/`
 - 対応する子テーマ → `wp-content/themes/`
+
+## アダルトサイト: FANZA連携
+1. DMMアフィリエイトに登録し、API ID と API用アフィリエイトID(末尾 -990〜-999)を取得
+2. プラグイン `FANZA Connector` を有効化 → 設定 → FANZA連携 に API ID / アフィリエイトID を入力
+3. 同じ画面の「イチオシ女優」に女優IDを最大8人分(推奨5人)入力 → トップ最上部に宣材写真・コメント・代表作が並ぶ
+   - 女優IDは同じ画面の「女優IDを調べる」で名前から検索できる
+   - 写真・表示名・おすすめ作品は任意で上書き可。行を空にすれば非表示。いつでも差し替え可能
+4. トップには続けて「人気の作品」「新着作品」が自動表示される。ヘッダー検索は FANZA の作品も検索する
+
+記事中でも使えるショートコード:
+```
+[fanza_featured]
+[fanza_items title="新着作品" sort="date" hits="8"]
+[fanza_items actress_id="12345" sort="rank" hits="4"]
+[fanza_items keyword="キーワード" hits="8"]
+```
+API の結果は6時間キャッシュされ(設定で変更可)、API障害時は前回の結果を表示する。
 
 ## アフィリエイトリンクの管理
 リンクは子テーマの `affiliate-links.json` で一元管理する。記事中ではショートコードを使う。

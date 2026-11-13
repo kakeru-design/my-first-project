@@ -21,6 +21,8 @@
 		</h1>
 	<?php endif; ?>
 
+	<?php do_action( 'affiliate_base_before_loop' ); ?>
+
 	<?php if ( have_posts() ) : ?>
 		<?php if ( is_home() && ! is_paged() ) : ?><h2 class="section-title">新着記事</h2><?php endif; ?>
 		<div class="post-grid">

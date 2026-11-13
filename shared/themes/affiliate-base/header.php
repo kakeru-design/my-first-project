@@ -19,6 +19,7 @@
 				<?php wp_nav_menu( array( 'theme_location' => 'global', 'container' => false, 'depth' => 1 ) ); ?>
 			</nav>
 		<?php endif; ?>
+		<?php do_action( 'affiliate_base_header_after' ); ?>
 	</div>
 </header>
 <main class="site-main">

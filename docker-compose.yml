@@ -40,6 +40,7 @@ services:
       - ./shared/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
       - ./shared/themes/affiliate-base:/var/www/html/wp-content/themes/affiliate-base:ro
       - ./sites/adult/themes/adult-child:/var/www/html/wp-content/themes/adult-child:ro
+      - ./sites/adult/plugins/fanza-connector:/var/www/html/wp-content/plugins/fanza-connector:ro
 
 volumes:
   db_data:

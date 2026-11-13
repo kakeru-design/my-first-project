@@ -29,11 +29,46 @@ add_filter(
 	}
 );
 
+/* ------------------------------------------------------------------
+ * トップページ: イチオシ女優(常に最上部) → 人気作品 → 新着作品
+ * イチオシ女優は 設定 → FANZA連携 から差し替える。
+ * ------------------------------------------------------------------ */
 add_action(
 	'affiliate_base_front_top',
 	function () {
-		echo '<h2 class="section-title">おすすめサービス比較</h2>';
-		echo do_shortcode( '[aff_ranking slugs="adult-a,adult-b,adult-c"]' );
+		if ( ! function_exists( 'fz_featured_html' ) ) {
+			if ( current_user_can( 'activate_plugins' ) ) {
+				echo '<p class="atk-warning">FANZA Connector プラグインを有効化してください。</p>';
+			}
+			return;
+		}
+		echo fz_featured_html(); // phpcs:ignore WordPress.Security.EscapeOutput
+		echo do_shortcode( '[fanza_items title="人気の作品" sub="いま売れている作品" sort="rank" hits="8"]' );
+		echo do_shortcode( '[fanza_items title="新着作品" sub="最近配信された作品" sort="date" hits="8"]' );
+	}
+);
+
+/* ヘッダーの検索フォーム(品番・女優名・キーワード) */
+add_action(
+	'affiliate_base_header_after',
+	function () {
+		?>
+		<form class="header-search" role="search" method="get" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+			<input type="search" name="s" value="<?php echo esc_attr( get_search_query() ); ?>" placeholder="品番・女優名・キーワードで探す" aria-label="検索">
+			<button type="submit">検索</button>
+		</form>
+		<?php
+	}
+);
+
+/* 検索結果ページで FANZA の作品も表示 */
+add_action(
+	'affiliate_base_before_loop',
+	function () {
+		if ( is_search() && function_exists( 'fz_items' ) && '' !== get_search_query( false ) ) {
+			echo '<section class="fz-section">' . fz_items_html( fz_items( array( 'keyword' => get_search_query( false ), 'hits' => 20, 'sort' => 'match' ) ) ) . '</section>'; // phpcs:ignore
+			echo '<h2 class="section-title">サイト内の記事</h2>';
+		}
 	}
 );
 
