@@ -1,0 +1,36 @@
+{
+  "uranai-a": {
+    "name": "電話占いサービスA",
+    "url": "https://example.com/aff/uranai-a",
+    "rating": 4.6,
+    "catch": "TODO: 一言キャッチコピー(例: 初回特典が手厚く初心者向け)",
+    "features": ["TODO: 特徴1", "TODO: 特徴2", "TODO: 特徴3"],
+    "price": "TODO",
+    "bonus": "TODO",
+    "methods": "電話 / チャット",
+    "payments": "TODO",
+    "cta": "電話占いサービスAの公式サイトを見る"
+  },
+  "uranai-b": {
+    "name": "電話占いサービスB",
+    "url": "https://example.com/aff/uranai-b",
+    "rating": 4.3,
+    "catch": "TODO",
+    "features": ["TODO: 特徴1", "TODO: 特徴2"],
+    "price": "TODO",
+    "bonus": "TODO",
+    "methods": "電話",
+    "payments": "TODO"
+  },
+  "uranai-c": {
+    "name": "チャット占いサービスC",
+    "url": "https://example.com/aff/uranai-c",
+    "rating": 4.0,
+    "catch": "TODO",
+    "features": ["TODO: 特徴1", "TODO: 特徴2"],
+    "price": "TODO",
+    "bonus": "TODO",
+    "methods": "チャット",
+    "payments": "TODO"
+  }
+}

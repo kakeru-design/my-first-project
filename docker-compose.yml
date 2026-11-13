@@ -1,0 +1,45 @@
+# ローカル確認用。本番はレンタルサーバーの WordPress にテーマ/プラグインをアップロードする。
+#   占いサイト:   http://localhost:8081
+#   アダルトサイト: http://localhost:8082
+services:
+  db:
+    image: mariadb:11.4
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_USER: wp
+      MARIADB_PASSWORD: wp
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+
+  uranai:
+    image: wordpress:6.8-php8.3-apache
+    depends_on: [db]
+    ports: ["8081:80"]
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wp
+      WORDPRESS_DB_NAME: wp_uranai
+    volumes:
+      - ./shared/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+      - ./shared/themes/affiliate-base:/var/www/html/wp-content/themes/affiliate-base:ro
+      - ./sites/uranai/themes/uranai-child:/var/www/html/wp-content/themes/uranai-child:ro
+
+  adult:
+    image: wordpress:6.8-php8.3-apache
+    depends_on: [db]
+    ports: ["8082:80"]
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wp
+      WORDPRESS_DB_PASSWORD: wp
+      WORDPRESS_DB_NAME: wp_adult
+    volumes:
+      - ./shared/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
+      - ./shared/themes/affiliate-base:/var/www/html/wp-content/themes/affiliate-base:ro
+      - ./sites/adult/themes/adult-child:/var/www/html/wp-content/themes/adult-child:ro
+
+volumes:
+  db_data:

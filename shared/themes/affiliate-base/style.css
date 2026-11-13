@@ -1,0 +1,119 @@
+/*
+Theme Name: Affiliate Base
+Description: アフィリエイトサイト用の軽量な親テーマ。色やフォントは子テーマの CSS 変数で切り替える。
+Version: 0.1.0
+Text Domain: affiliate-base
+*/
+
+:root {
+	--c-bg: #ffffff;
+	--c-surface: #f6f6f8;
+	--c-text: #222222;
+	--c-muted: #6b6b76;
+	--c-border: #e3e3e8;
+	--c-primary: #3b5bdb;
+	--c-primary-text: #ffffff;
+	--c-accent: #f08c00;
+	--c-header-bg: #ffffff;
+	--c-header-text: #222222;
+	--font-body: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Yu Gothic", sans-serif;
+	--font-heading: var(--font-body);
+	--radius: 10px;
+	--content-w: 760px;
+	--wide-w: 1080px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+	margin: 0;
+	background: var(--c-bg);
+	color: var(--c-text);
+	font-family: var(--font-body);
+	font-size: 16px;
+	line-height: 1.85;
+	overflow-wrap: anywhere;
+}
+img { max-width: 100%; height: auto; }
+a { color: var(--c-primary); }
+h1, h2, h3, h4 { font-family: var(--font-heading); line-height: 1.4; }
+
+.container { width: min(100% - 32px, var(--wide-w)); margin-inline: auto; }
+.container-narrow { width: min(100% - 32px, var(--content-w)); margin-inline: auto; }
+
+/* Header */
+.site-header { background: var(--c-header-bg); color: var(--c-header-text); border-bottom: 1px solid var(--c-border); }
+.site-header .container { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; flex-wrap: wrap; }
+.site-title { margin: 0; font-size: 1.35rem; font-weight: 700; }
+.site-title a { color: inherit; text-decoration: none; }
+.site-description { margin: 0; font-size: .8rem; color: var(--c-muted); }
+.site-header .site-description { color: inherit; opacity: .75; }
+.global-nav ul { list-style: none; display: flex; gap: 18px; margin: 0; padding: 0; flex-wrap: wrap; }
+.global-nav a { color: inherit; text-decoration: none; font-size: .92rem; }
+.global-nav a:hover { text-decoration: underline; }
+
+/* Main */
+.site-main { padding-block: 32px 64px; }
+.hero { padding: 48px 0 32px; text-align: center; }
+.hero h1 { font-size: clamp(1.5rem, 4vw, 2.2rem); margin: 0 0 8px; }
+.hero p { color: var(--c-muted); margin: 0; }
+
+.section-title { font-size: 1.25rem; border-left: 5px solid var(--c-primary); padding-left: 12px; margin: 40px 0 16px; }
+
+.post-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+.card { background: var(--c-bg); border: 1px solid var(--c-border); border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
+.card a { color: inherit; text-decoration: none; }
+.card-thumb { aspect-ratio: 16 / 9; background: var(--c-surface); overflow: hidden; }
+.card-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.card-body { padding: 14px 16px 18px; }
+.card-cat { font-size: .75rem; color: var(--c-primary); font-weight: 700; }
+.card-title { font-size: 1rem; margin: 4px 0 6px; }
+.card-date { font-size: .78rem; color: var(--c-muted); }
+
+/* Article */
+.entry-header { margin-bottom: 24px; }
+.entry-title { font-size: clamp(1.4rem, 3.6vw, 1.9rem); margin: 8px 0; }
+.entry-meta { font-size: .82rem; color: var(--c-muted); }
+.entry-content h2 { font-size: 1.35rem; background: var(--c-surface); border-left: 5px solid var(--c-primary); padding: 10px 14px; margin: 48px 0 16px; border-radius: 4px; }
+.entry-content h3 { font-size: 1.12rem; border-bottom: 2px solid var(--c-border); padding-bottom: 6px; margin: 32px 0 12px; }
+.entry-content table { border-collapse: collapse; width: 100%; }
+.entry-content th, .entry-content td { border: 1px solid var(--c-border); padding: 8px 10px; }
+.breadcrumb { font-size: .8rem; color: var(--c-muted); margin-bottom: 12px; }
+.breadcrumb a { color: inherit; }
+
+.pagination { margin-top: 32px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.pagination .page-numbers { padding: 6px 12px; border: 1px solid var(--c-border); border-radius: 6px; text-decoration: none; color: var(--c-text); }
+.pagination .current { background: var(--c-primary); color: var(--c-primary-text); border-color: var(--c-primary); }
+
+/* Footer */
+.site-footer { background: var(--c-surface); border-top: 1px solid var(--c-border); padding: 32px 0; font-size: .85rem; color: var(--c-muted); }
+.site-footer ul { list-style: none; padding: 0; margin: 0 0 12px; display: flex; gap: 16px; flex-wrap: wrap; }
+.site-footer a { color: inherit; }
+
+/* ---------- Affiliate Toolkit ---------- */
+.atk-pr-notice { font-size: .8rem; color: var(--c-muted); background: var(--c-surface); border-radius: 6px; padding: 8px 12px; margin: 0 0 24px; }
+.atk-pr-label { display: inline-block; background: var(--c-muted); color: #fff; font-weight: 700; font-size: .7rem; padding: 1px 6px; border-radius: 3px; margin-right: 8px; }
+.atk-button-wrap { text-align: center; margin: 20px 0; }
+.atk-button { display: inline-block; min-width: min(100%, 320px); background: var(--c-accent); color: #fff; font-weight: 700; text-decoration: none; padding: 14px 24px; border-radius: 999px; box-shadow: 0 3px 0 rgb(0 0 0 / .15); transition: transform .15s, box-shadow .15s; }
+.atk-button:hover { transform: translateY(2px); box-shadow: 0 1px 0 rgb(0 0 0 / .15); }
+.atk-table .atk-button { min-width: 0; padding: 8px 14px; font-size: .85rem; }
+.atk-warning { display: block; color: #c92a2a; font-size: .75rem; margin-top: 4px; }
+
+.atk-ranking { list-style: none; padding: 0; margin: 24px 0; counter-reset: none; }
+.atk-rank-item { border: 2px solid var(--c-border); border-radius: var(--radius); padding: 18px; margin-bottom: 20px; }
+.atk-rank-1 { border-color: #d4a017; }
+.atk-rank-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.atk-rank-num { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--c-muted); color: #fff; font-weight: 700; }
+.atk-rank-1 .atk-rank-num { background: #d4a017; }
+.atk-rank-2 .atk-rank-num { background: #9aa0a6; }
+.atk-rank-3 .atk-rank-num { background: #b06d3b; }
+.atk-rank-name { font-size: 1.15rem; font-weight: 700; }
+.atk-stars { color: #f5a623; letter-spacing: 1px; }
+.atk-stars-num { color: var(--c-text); font-weight: 700; margin-left: 4px; }
+.atk-rank-catch { font-weight: 700; margin: 10px 0 4px; }
+.atk-rank-features { margin: 0; padding-left: 1.2em; }
+
+.atk-table-wrap { overflow-x: auto; margin: 24px 0; }
+.atk-table { min-width: 560px; font-size: .9rem; text-align: center; }
+.atk-table thead th { background: var(--c-primary); color: var(--c-primary-text); }
+.atk-table tbody th { background: var(--c-surface); white-space: nowrap; }
