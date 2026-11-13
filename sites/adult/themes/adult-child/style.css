@@ -7,22 +7,42 @@ Text Domain: adult-child
 */
 
 :root {
-	--c-bg: #121215;
-	--c-surface: #1c1c21;
-	--c-text: #ececf1;
-	--c-muted: #9a9aa8;
-	--c-border: #2c2c33;
-	--c-primary: #ef5f55;
+	/*
+	 * 配色の考え方(心理学ベース)
+	 * - 背景: 青紫寄りの深い夜色。肌色(暖色)の補色側なので写真の肌が最も映える。
+	 *         夜間・スマホ・プライベートな閲覧環境で眩しくなく、「人目のない夜」の没入感を作る。
+	 * - 主アクセント(CTA専用): ホットピンク/マゼンタ。赤系は性的魅力の知覚を高める("Romantic red"効果)。
+	 *         ボタン以外では使わず、画面内で唯一の色にしてクリック先を一目で分からせる(孤立効果)。
+	 * - セール: 赤橙。緊急性・希少性(今だけ安い)を知らせる専用色。
+	 * - PICK UP/評価: シャンパンゴールド。特別感・厳選感(プレミアム)を演出。
+	 * - 文字: わずかに暖かい白。真っ白より目に優しく、肌の暖かさと調和する。
+	 */
+	--c-bg: #120f1a;
+	--c-surface: #1c1826;
+	--c-text: #f4eef2;
+	--c-muted: #a39cb0;
+	--c-border: #2d2738;
+	--c-primary: #ff3d81;
 	--c-primary-text: #ffffff;
-	--c-accent: #ef5f55;
-	--c-header-bg: #121215;
-	--c-header-text: #ffffff;
+	--c-accent: #ff3d81;
+	--c-sale: #ff5a2e;
+	--c-premium: #e9c27a;
+	--c-header-bg: #120f1a;
+	--c-header-text: #f4eef2;
 }
 
 .card { background: var(--c-surface); }
 .atk-table tbody th { color: var(--c-text); }
 .hero h1 { color: #fff; }
-.site-title a { color: var(--c-primary); letter-spacing: .02em; }
+.site-title a { display: inline-block; color: var(--c-text); letter-spacing: .02em; }
+.site-title a::first-letter { color: var(--c-primary); }
+/* イチオシ女優の背後に、間接照明のような暖色のにじみ(親密さ・夜のムード) */
+.fz-featured { position: relative; isolation: isolate; }
+.fz-featured::before { content: ""; position: absolute; inset: -40px -16px; z-index: -1; pointer-events: none;
+	background: radial-gradient(60% 55% at 25% 40%, rgb(255 140 90 / .10), transparent 70%),
+	            radial-gradient(50% 50% at 80% 60%, rgb(255 61 129 / .08), transparent 70%); }
+.fz-card { box-shadow: 0 10px 30px rgb(0 0 0 / .35); }
+.fz-card-photo::after { content: ""; position: absolute; inset: auto 0 0; height: 35%; background: linear-gradient(transparent, rgb(18 15 26 / .55)); }
 .site-header { border-bottom-color: var(--c-border); position: sticky; top: 0; z-index: 50; }
 .global-nav { width: 100%; overflow-x: auto; }
 .global-nav ul { flex-wrap: nowrap; white-space: nowrap; }
