@@ -121,3 +121,6 @@ add_action(
 	},
 	1
 );
+
+/* トップは主役コンテンツを最上部に出すため、サイト名の大きな帯は出さない(サイト名はヘッダーの h1) */
+add_filter( 'affiliate_base_show_hero', '__return_false' );

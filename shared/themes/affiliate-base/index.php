@@ -1,10 +1,12 @@
 <?php get_header(); ?>
 <div class="container">
 	<?php if ( is_home() && ! is_paged() ) : ?>
-		<section class="hero">
-			<h1><?php bloginfo( 'name' ); ?></h1>
-			<p><?php bloginfo( 'description' ); ?></p>
-		</section>
+		<?php if ( apply_filters( 'affiliate_base_show_hero', true ) ) : ?>
+			<section class="hero">
+				<p class="hero-title"><?php bloginfo( 'name' ); ?></p>
+				<p><?php bloginfo( 'description' ); ?></p>
+			</section>
+		<?php endif; ?>
 		<?php do_action( 'affiliate_base_front_top' ); ?>
 	<?php else : ?>
 		<?php affiliate_base_breadcrumb(); ?>

@@ -13,6 +13,7 @@ shared/
 sites/
   uranai/themes/uranai-child/        占いサイト用の子テーマ(紫×金)
   adult/themes/adult-child/          アダルトサイト用の子テーマ(ダーク・年齢確認ゲート)
+  uranai/plugins/uranai-tools/       占い機能(12星座ランキング・九星気学診断)
   adult/plugins/fanza-connector/     FANZA API連携(イチオシ女優・作品一覧・検索)
 docs/                                各サイトのコンテンツ計画
 docker-compose.yml                   ローカル確認用
@@ -31,6 +32,16 @@ docker compose up -d
 - `shared/mu-plugins/affiliate-toolkit.php` → `wp-content/mu-plugins/`
 - `shared/themes/affiliate-base/` → `wp-content/themes/`
 - 対応する子テーマ → `wp-content/themes/`
+
+## 占いサイト: 12星座ランキング・九星気学
+プラグイン `Uranai Tools` を有効化すると、トップに「今日の12星座ランキング」→「九星気学の診断」→「電話占いランキング」の順で並ぶ。
+
+- **12星座ランキング** `[zodiac_ranking]`: 毎日0時に自動更新。日付から決まる計算なので、同じ日は誰が見ても同じ順位。
+  運勢文・開運アドバイス・ラッキーカラー/アイテムは `data.php` の文例から組み合わせる(文例を増やすほどバリエーションが増える)。
+- **九星気学** `[kyusei_form]`: 生年月日 → 本命星・月命星・性格・今年/今月の運勢(年盤・月盤での位置)・相性の良い星・今日の星座順位。
+  立春・節入りで年/月を区切る。結果URL(`?birth=`)は検索エンジンにインデックスさせない。
+- 診断結果の下にアップセル枠(現在は電話占いへの送客)。手相・定期購読ができたら `ut_kyusei_upsell_html` フィルタで差し替える。
+- WordPress の 設定 → 一般 → タイムゾーン を「東京」にしておくこと(ランキングの日付切り替えに使用)。
 
 ## アダルトサイト: FANZA連携
 1. DMMアフィリエイトに登録し、API ID と API用アフィリエイトID(末尾 -990〜-999)を取得

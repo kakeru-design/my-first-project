@@ -33,7 +33,7 @@ Text Domain: adult-child
 
 .card { background: var(--c-surface); }
 .atk-table tbody th { color: var(--c-text); }
-.hero h1 { color: #fff; }
+.hero .hero-title { color: #fff; }
 .site-title a { display: inline-block; color: var(--c-text); letter-spacing: .02em; }
 .site-title a::first-letter { color: var(--c-primary); }
 /* イチオシ女優の背後に、間接照明のような暖色のにじみ(親密さ・夜のムード) */
@@ -67,5 +67,5 @@ html.age-gate-open { overflow: hidden; }
 
 /* トップはイチオシ女優を最上部に見せるため、サイト名エリアをコンパクトに */
 .home .hero { padding: 16px 0 0; text-align: left; }
-.home .hero h1 { font-size: 1rem; color: var(--c-muted); font-weight: 500; }
+.home .hero .hero-title { font-size: 1rem; color: var(--c-muted); font-weight: 500; }
 .home .hero p { font-size: .8rem; }

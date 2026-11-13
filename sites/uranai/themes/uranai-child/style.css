@@ -29,5 +29,9 @@ Text Domain: uranai-child
 	padding: 56px 20px 44px;
 }
 .hero p { color: #d9cdf0; }
-.hero h1::before, .hero h1::after { content: "✦"; color: #c9a227; margin: 0 .5em; font-size: .7em; vertical-align: middle; }
+.hero .hero-title::before, .hero .hero-title::after { content: "✦"; color: #c9a227; margin: 0 .5em; font-size: .7em; vertical-align: middle; }
 .entry-content h2 { border-left-color: #c9a227; }
+
+/* トップは星座ランキングをすぐ見せるため、サイト名エリアを控えめに */
+.home .hero { padding: 28px 20px 24px; }
+.home .hero .hero-title { font-size: clamp(1.2rem, 3.4vw, 1.6rem); }

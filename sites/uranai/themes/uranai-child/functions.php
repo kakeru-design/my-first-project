@@ -27,10 +27,16 @@ add_filter(
 	}
 );
 
-/* トップページにおすすめランキングを表示 */
+/* トップページ: 12星座ランキング → 九星気学の診断 → 電話占いランキング */
 add_action(
 	'affiliate_base_front_top',
 	function () {
+		if ( shortcode_exists( 'zodiac_ranking' ) ) {
+			echo do_shortcode( '[zodiac_ranking]' );
+			echo do_shortcode( '[kyusei_form]' );
+		} elseif ( current_user_can( 'activate_plugins' ) ) {
+			echo '<p class="atk-warning">Uranai Tools プラグインを有効化してください。</p>';
+		}
 		echo '<h2 class="section-title">おすすめ電話占いランキング</h2>';
 		echo do_shortcode( '[aff_ranking slugs="uranai-a,uranai-b,uranai-c"]' );
 	}
@@ -43,3 +49,6 @@ add_action(
 		echo '<p>占いの結果は娯楽・参考情報としてお楽しみください。健康・法律・金銭などの重要な判断は専門家にご相談ください。</p>';
 	}
 );
+
+/* トップは主役コンテンツを最上部に出すため、サイト名の大きな帯は出さない(サイト名はヘッダーの h1) */
+add_filter( 'affiliate_base_show_hero', '__return_false' );

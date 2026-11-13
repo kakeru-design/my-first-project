@@ -26,6 +26,7 @@ services:
       - ./shared/mu-plugins:/var/www/html/wp-content/mu-plugins:ro
       - ./shared/themes/affiliate-base:/var/www/html/wp-content/themes/affiliate-base:ro
       - ./sites/uranai/themes/uranai-child:/var/www/html/wp-content/themes/uranai-child:ro
+      - ./sites/uranai/plugins/uranai-tools:/var/www/html/wp-content/plugins/uranai-tools:ro
 
   adult:
     image: wordpress:6.8-php8.3-apache
