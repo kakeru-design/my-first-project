@@ -17,6 +17,9 @@ defined( 'ABSPATH' ) || exit;
 const FZ_OPTION       = 'fanza_connector';
 const FZ_MAX_FEATURED = 8;
 const FZ_API_BASE     = 'https://api.dmm.com/affiliate/v3/';
+const FZ_PLUGIN_FILE  = __FILE__;
+
+require_once __DIR__ . '/includes/price-tracker.php';
 
 /* ==================================================================
  * 設定
@@ -29,6 +32,7 @@ function fz_settings() {
 		'cache_hours'    => 6,
 		'featured_title' => '今月のイチオシ女優',
 		'featured'       => array(),
+		'track_pages'    => 5,
 	);
 	return wp_parse_args( (array) get_option( FZ_OPTION, array() ), $defaults );
 }
@@ -54,9 +58,10 @@ function fz_featured_rows() {
  * ================================================================== */
 
 /**
+ * @param bool $fresh true ならキャッシュを使わずに取得(価格記録用)
  * @return array|WP_Error API の result 部分
  */
-function fz_api( $endpoint, array $params ) {
+function fz_api( $endpoint, array $params, $fresh = false ) {
 	$pre = apply_filters( 'pre_fz_api', null, $endpoint, $params );
 	if ( null !== $pre ) {
 		return $pre;
@@ -78,13 +83,13 @@ function fz_api( $endpoint, array $params ) {
 	$url = FZ_API_BASE . $endpoint . '?' . http_build_query( $params, '', '&', PHP_QUERY_RFC3986 );
 	$key = 'fz_' . md5( $url );
 
-	$cached = get_transient( $key );
+	$cached = $fresh ? false : get_transient( $key );
 	if ( false !== $cached ) {
 		return $cached;
 	}
 
 	$backup = get_transient( $key . '_bak' );
-	if ( get_transient( $key . '_err' ) ) {
+	if ( ! $fresh && get_transient( $key . '_err' ) ) {
 		// 直近で失敗している間はAPIを叩かない
 		return false !== $backup ? $backup : new WP_Error( 'fz_api', 'FANZA API に一時的に接続できません。' );
 	}
@@ -248,7 +253,10 @@ function fz_stars_html( $avg, $count = 0 ) {
 		. esc_html( number_format( $avg, 1 ) ) . ( $count ? '<span class="fz-rating-count">(' . (int) $count . '件)</span>' : '' ) . '</p>';
 }
 
-function fz_item_card_html( $item ) {
+/**
+ * @param string $badge カード上部に出す追加バッジのHTML(呼び出し側でエスケープ済み)
+ */
+function fz_item_card_html( $item, $badge = '' ) {
 	$url       = $item['affiliateURL'] ?? '';
 	$actresses = array_column( $item['iteminfo']['actress'] ?? array(), 'name' );
 	$genres    = array_slice( array_column( $item['iteminfo']['genre'] ?? array(), 'name' ), 0, 3 );
@@ -259,6 +267,9 @@ function fz_item_card_html( $item ) {
 	$out .= '<a class="fz-item-link" href="' . esc_url( $url ) . '" ' . fz_link_attrs() . '>';
 	$out .= '<div class="fz-item-thumb">' . ( $img ? '<img src="' . esc_url( $img ) . '" alt="" loading="lazy">' : '' ) . '</div>';
 	$out .= '<div class="fz-item-body">';
+	if ( $badge ) {
+		$out .= '<div class="fz-badges">' . $badge . '</div>';
+	}
 	if ( $pr['off'] ) {
 		$out .= '<span class="fz-off">' . (int) $pr['off'] . '%OFF</span>';
 	}
@@ -364,6 +375,7 @@ function fz_sanitize( $input ) {
 		'api_id'         => sanitize_text_field( $input['api_id'] ?? '' ),
 		'affiliate_id'   => preg_replace( '/[^A-Za-z0-9_-]/', '', $input['affiliate_id'] ?? '' ),
 		'cache_hours'    => max( 1, min( 48, (int) ( $input['cache_hours'] ?? 6 ) ) ),
+		'track_pages'    => max( 1, min( 20, (int) ( $input['track_pages'] ?? 5 ) ) ),
 		'featured_title' => sanitize_text_field( $input['featured_title'] ?? '' ),
 		'featured'       => array(),
 	);
@@ -487,6 +499,7 @@ function fz_render_settings_page() {
 			<table class="form-table">
 				<tr><th>API ID</th><td><input type="text" class="regular-text" name="<?php echo esc_attr( $name ); ?>[api_id]" value="<?php echo esc_attr( $s['api_id'] ); ?>"></td></tr>
 				<tr><th>アフィリエイトID</th><td><input type="text" class="regular-text" name="<?php echo esc_attr( $name ); ?>[affiliate_id]" value="<?php echo esc_attr( $s['affiliate_id'] ); ?>"><p class="description">API用のID(末尾が -990〜-999 のもの)</p></td></tr>
+				<tr><th>価格記録の取得ページ数</th><td><input type="number" min="1" max="20" name="<?php echo esc_attr( $name ); ?>[track_pages]" value="<?php echo esc_attr( $s['track_pages'] ); ?>"> ページ(1ページ100作品。人気順で取得)</td></tr>
 				<tr><th>キャッシュ時間</th><td><input type="number" min="1" max="48" name="<?php echo esc_attr( $name ); ?>[cache_hours]" value="<?php echo esc_attr( $s['cache_hours'] ); ?>"> 時間</td></tr>
 			</table>
 			<?php submit_button( '保存する' ); ?>
@@ -497,6 +510,8 @@ function fz_render_settings_page() {
 			<?php wp_nonce_field( 'fz_flush' ); ?>
 			<?php submit_button( 'キャッシュを削除して最新データを取得', 'secondary' ); ?>
 		</form>
+
+		<?php do_action( 'fz_settings_page_after' ); ?>
 	</div>
 	<script>
 	document.querySelectorAll('.fz-media').forEach(function (btn) {

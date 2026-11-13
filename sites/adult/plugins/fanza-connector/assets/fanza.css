@@ -51,3 +51,12 @@
 .fz-item-cta { display: block; text-align: center; background: var(--c-primary, #e64980); color: #fff; font-weight: 700; text-decoration: none; padding: 10px; border-radius: 999px; font-size: .88rem; box-shadow: 0 4px 16px color-mix(in srgb, var(--c-primary, #e64980) 35%, transparent); transition: transform .15s; }
 .fz-item-cta:hover, .fz-card-cta:hover { transform: translateY(-1px); }
 .fz-item-cta small { font-size: .65rem; font-weight: 400; margin-left: 6px; opacity: .85; }
+
+/* 価格トラッカーのバッジ */
+.fz-badges { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+.fz-badges + .fz-off { margin-bottom: 6px; }
+.fz-badge { display: inline-block; font-weight: 700; font-size: .72rem; padding: 2px 8px; border-radius: 4px; line-height: 1.5; }
+.fz-badge-drop { background: var(--c-sale, #e8590c); color: #fff; }
+.fz-badge-prev { background: transparent; color: var(--c-muted, #888); font-weight: 400; border: 1px solid var(--c-border, #ccc); }
+.fz-badge-rank { background: var(--c-premium, #e9c27a); color: #1a1408; }
+.fz-badge-time { background: transparent; color: var(--c-sale, #e8590c); border: 1px solid var(--c-sale, #e8590c); }

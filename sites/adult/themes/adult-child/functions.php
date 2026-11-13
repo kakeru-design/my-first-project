@@ -30,7 +30,7 @@ add_filter(
 );
 
 /* ------------------------------------------------------------------
- * トップページ: イチオシ女優(常に最上部) → 人気作品 → 新着作品
+ * トップページ: イチオシ女優(常に最上部) → 今日の値下げ → 終了間近 → 人気作品 → 新着作品
  * イチオシ女優は 設定 → FANZA連携 から差し替える。
  * ------------------------------------------------------------------ */
 add_action(
@@ -43,6 +43,8 @@ add_action(
 			return;
 		}
 		echo fz_featured_html(); // phpcs:ignore WordPress.Security.EscapeOutput
+		echo do_shortcode( '[fanza_price_drops hits="8"]' );
+		echo do_shortcode( '[fanza_ending_soon hits="8"]' );
 		echo do_shortcode( '[fanza_items title="人気の作品" sub="いま売れている作品" sort="rank" hits="8"]' );
 		echo do_shortcode( '[fanza_items title="新着作品" sub="最近配信された作品" sort="date" hits="8"]' );
 	}
