@@ -87,6 +87,7 @@ function ut_zodiac_ranking( ?DateTimeInterface $date = null ) {
 			$jitter    = (int) floor( ut_rand( $seed, $key . $k ) * 3 ) - 1; // -1, 0, +1
 			$sub[ $k ] = array( 'label' => $label, 'stars' => max( 1, min( 5, $base + $jitter ) ) );
 		}
+		$notes = $texts['signs'][ $key ] ?? array();
 		$out[] = array_merge(
 			ut_zodiac_signs()[ $key ],
 			array(
@@ -98,6 +99,7 @@ function ut_zodiac_ranking( ?DateTimeInterface $date = null ) {
 				'color'  => $colors[ $i % count( $colors ) ],
 				'item'   => $items[ $i % count( $items ) ],
 				'sub'    => $sub,
+				'note'   => $notes ? $notes[ (int) floor( ut_rand( $seed, $key . '-note' ) * count( $notes ) ) % count( $notes ) ] : '',
 			)
 		);
 	}
@@ -131,6 +133,9 @@ function ut_zodiac_ranking_html( $atts = array() ) {
 		$out .= '<h3 class="ut-rank-sign"><span class="ut-symbol" aria-hidden="true">' . esc_html( $r['symbol'] ) . '</span>' . esc_html( $r['name'] )
 			. '<small>' . esc_html( $r['period'] ) . '</small>' . ( $r['key'] === $my_key ? '<em class="ut-mine-label">あなたの星座</em>' : '' ) . '</h3>';
 		$out .= '<p class="ut-rank-text">' . esc_html( $r['text'] ) . '</p>';
+		if ( '' !== $r['note'] ) {
+			$out .= '<p class="ut-rank-note">' . esc_html( $r['note'] ) . '</p>';
+		}
 		$out .= '<dl class="ut-sub">';
 		foreach ( $r['sub'] as $s ) {
 			$out .= '<div><dt>' . esc_html( $s['label'] ) . '</dt><dd>' . ut_stars( $s['stars'] ) . '</dd></div>';

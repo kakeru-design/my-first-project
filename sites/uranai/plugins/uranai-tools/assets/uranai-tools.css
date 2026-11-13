@@ -31,6 +31,8 @@
 .ut-mine-label { font-style: normal; font-size: .7rem; background: var(--c-accent, #d6336c); color: #fff; padding: 1px 8px; border-radius: 999px; }
 .ut-rank.is-mine { outline: 3px solid var(--c-accent, #d6336c); outline-offset: 2px; }
 .ut-rank-text { margin: 0 0 8px; font-size: .92rem; line-height: 1.75; }
+.ut-rank-note { margin: -4px 0 8px; font-size: .8rem; color: var(--c-primary, #5f3dc4); }
+.ut-rank-note::before { content: "✦ "; color: #c9a227; }
 .ut-sub { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0 0 6px; font-size: .8rem; }
 .ut-sub div { display: flex; gap: 6px; }
 .ut-sub dt { color: var(--c-muted, #777); }
