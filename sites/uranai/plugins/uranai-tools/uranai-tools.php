@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Uranai Tools
  * Description: 今日の12星座ランキング(毎日0時に自動更新)と、生年月日から診断する九星気学。
- * Version: 0.2.0
+ * Version: 0.3.0
  * Requires PHP: 8.0
  *
  * ショートコード:
@@ -17,6 +17,8 @@ defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/data.php';
 require_once __DIR__ . '/kyusei.php';
+require_once __DIR__ . '/daily.php';
+require_once __DIR__ . '/pages.php';
 
 /* ==================================================================
  * 共通
@@ -146,6 +148,7 @@ function ut_zodiac_ranking_html( $atts = array() ) {
 		if ( 'low' === $r['tier'] ) {
 			$out .= '<p class="ut-advice"><b>開運アドバイス</b>' . esc_html( $r['advice'] ) . '</p>';
 		}
+		$out .= '<p class="ut-rank-more"><a href="' . esc_url( ut_sign_url( $r['key'] ) ) . '">' . esc_html( $r['name'] ) . 'のくわしい運勢 ›</a></p>';
 		$out .= '</div></li>';
 	}
 	$out .= '</ol>';
@@ -279,7 +282,7 @@ add_filter(
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		wp_enqueue_style( 'uranai-tools', plugins_url( 'assets/uranai-tools.css', __FILE__ ), array(), '0.2.0' );
+		wp_enqueue_style( 'uranai-tools', plugins_url( 'assets/uranai-tools.css', __FILE__ ), array(), '0.3.0' );
 	}
 );
 
