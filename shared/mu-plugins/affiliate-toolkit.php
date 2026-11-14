@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Affiliate Toolkit
  * Description: 2サイト共通のアフィリエイト機能(PR表記・リンク管理・ボタン・ランキング)。mu-plugins に設置して使う。
- * Version: 0.1.0
+ * Version: 0.2.0
  *
  * 案件データはテーマ側で `atk_links` フィルタから渡す(子テーマの affiliate-links.json)。
  *   [aff_button slug="xxx"]            … CTAボタン
@@ -231,4 +231,79 @@ add_action(
 		}
 	},
 	100
+);
+
+/* ------------------------------------------------------------------
+ * Google アナリティクス(GA4)
+ * 設定 → 一般 の「GA4 測定ID」に G-XXXXXXX を入れると計測タグを出力する。
+ * - ログイン中の編集者・管理者は計測しない(自分のアクセスを除外)
+ * - URL の birth パラメータ(占いの生年月日)は送信前に取り除く
+ * - アフィリエイトリンクのクリックを affiliate_click イベントとして記録
+ * ------------------------------------------------------------------ */
+add_action(
+	'admin_init',
+	function () {
+		register_setting(
+			'general',
+			'atk_ga_id',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => function ( $v ) {
+					$v = strtoupper( trim( (string) $v ) );
+					return preg_match( '/^G-[A-Z0-9]{4,20}$/', $v ) ? $v : '';
+				},
+				'default'           => '',
+			)
+		);
+		add_settings_field(
+			'atk_ga_id',
+			'GA4 測定ID',
+			function () {
+				printf(
+					'<input name="atk_ga_id" id="atk_ga_id" type="text" class="regular-text" placeholder="G-XXXXXXXXXX" value="%s"><p class="description">Google アナリティクスの測定IDを入れると計測を開始します。ログイン中の編集者・管理者のアクセスは計測しません。</p>',
+					esc_attr( get_option( 'atk_ga_id', '' ) )
+				);
+			},
+			'general'
+		);
+	}
+);
+
+add_action(
+	'wp_head',
+	function () {
+		$id = get_option( 'atk_ga_id', '' );
+		if ( ! $id || current_user_can( 'edit_posts' ) ) {
+			return;
+		}
+		?>
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo esc_attr( $id ); ?>"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+(function () {
+	var u = new URL(location.href);
+	u.searchParams.delete('birth');
+	gtag('config', <?php echo wp_json_encode( $id ); ?>, { page_location: u.toString() });
+})();
+document.addEventListener('click', function (e) {
+	var a = e.target.closest && e.target.closest('a[href]');
+	if (!a) return;
+	var href = a.getAttribute('href') || '';
+	if (!/\/go\/|dmm\.co\.jp|dmm\.com/.test(href)) return;
+	var sec = a.closest('section');
+	var head = sec && sec.querySelector('h2');
+	var card = a.closest('.fz-item, .fz-card, .atk-rank-item');
+	var name = card && card.querySelector('.fz-item-title, .fz-card-name, .atk-rank-name');
+	gtag('event', 'affiliate_click', {
+		placement: head ? head.textContent.trim().slice(0, 50) : 'その他',
+		item_name: name ? name.textContent.trim().slice(0, 80) : (a.textContent || '').trim().slice(0, 80),
+		link_domain: (href.match(/^https?:\/\/([^\/]+)/) || [, location.hostname])[1]
+	});
+});
+</script>
+		<?php
+	},
+	2
 );
