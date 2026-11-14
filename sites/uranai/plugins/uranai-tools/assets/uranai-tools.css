@@ -73,3 +73,24 @@
 .ut-upsell { margin-top: 24px; padding: 18px; border-radius: var(--radius, 10px); border: 2px solid var(--c-accent, #d6336c); text-align: center; }
 .ut-upsell-title { font-weight: 700; font-size: 1.05rem !important; margin: 0 0 4px; }
 .ut-upsell p { margin: 0 0 4px; }
+
+/* 今日の運勢・今月の方位 */
+.ut-today, .ut-directions { margin-top: 20px; padding: 16px; border: 1px solid var(--c-border, #ddd); border-radius: var(--radius, 10px); }
+.ut-today { border: 2px solid #c9a227; background: linear-gradient(135deg, #fffaf0, var(--c-bg, #fff) 70%); }
+.ut-result .ut-today h3, .ut-result .ut-directions h3 { margin: 0 0 6px; border: 0; padding: 0; display: flex; align-items: baseline; gap: 8px; }
+.ut-today-date { font-size: .78rem; font-weight: 400; color: var(--c-muted, #777); }
+.ut-today-list { margin: 10px 0 0; display: grid; gap: 8px; font-size: .88rem; }
+.ut-today-list div { display: grid; grid-template-columns: 9.5em 1fr; gap: 8px; align-items: baseline; }
+.ut-today-list dt { font-weight: 700; font-size: .78rem; color: var(--c-primary, #5f3dc4); }
+.ut-today-list .is-dont dt { color: #c92a2a; }
+.ut-today-list dd { margin: 0; }
+@media (max-width: 420px) { .ut-today-list div { grid-template-columns: 1fr; gap: 0; } }
+.ut-dir-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 8px 0 !important; }
+.ut-dir-label { font-size: .78rem; width: 4em; }
+.ut-dir-label.is-good { color: #2b8a3e; }
+.ut-dir-label.is-bad { color: #c92a2a; }
+.ut-dir { display: inline-flex; align-items: baseline; gap: 4px; padding: 3px 12px; border-radius: 999px; font-size: .9rem; font-weight: 700; }
+.ut-dir.is-good { background: #ebfbee; color: #2b8a3e; border: 1px solid #b2f2bb; }
+.ut-dir.is-bad { background: #fff5f5; color: #c92a2a; border: 1px solid #ffc9c9; }
+.ut-dir small { font-size: .68rem; font-weight: 400; }
+.ut-dir-none { font-size: .82rem; color: var(--c-muted, #777); }
