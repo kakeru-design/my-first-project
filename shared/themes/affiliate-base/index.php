@@ -36,7 +36,7 @@
 			?>
 		</div>
 		<div class="pagination"><?php echo paginate_links(); // phpcs:ignore ?></div>
-	<?php else : ?>
+	<?php elseif ( ! is_home() ) : ?>
 		<p>記事が見つかりませんでした。</p>
 	<?php endif; ?>
 </div>
