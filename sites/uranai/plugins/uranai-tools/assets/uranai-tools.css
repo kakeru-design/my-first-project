@@ -73,3 +73,77 @@
 .ut-upsell { margin-top: 24px; padding: 18px; border-radius: var(--radius, 10px); border: 2px solid var(--c-accent, #d6336c); text-align: center; }
 .ut-upsell-title { font-weight: 700; font-size: 1.05rem !important; margin: 0 0 4px; }
 .ut-upsell p { margin: 0 0 4px; }
+
+/* 今日の運勢・今月の方位 */
+.ut-today, .ut-directions { margin-top: 20px; padding: 16px; border: 1px solid var(--c-border, #ddd); border-radius: var(--radius, 10px); }
+.ut-today { border: 2px solid #c9a227; background: linear-gradient(135deg, #fffaf0, var(--c-bg, #fff) 70%); }
+.ut-result .ut-today h3, .ut-result .ut-directions h3 { margin: 0 0 6px; border: 0; padding: 0; display: flex; align-items: baseline; gap: 8px; }
+.ut-today-date { font-size: .78rem; font-weight: 400; color: var(--c-muted, #777); }
+.ut-today-list { margin: 10px 0 0; display: grid; gap: 8px; font-size: .88rem; }
+.ut-today-list div { display: grid; grid-template-columns: 9.5em 1fr; gap: 8px; align-items: baseline; }
+.ut-today-list dt { font-weight: 700; font-size: .78rem; color: var(--c-primary, #5f3dc4); }
+.ut-today-list .is-dont dt { color: #c92a2a; }
+.ut-today-list dd { margin: 0; }
+@media (max-width: 420px) { .ut-today-list div { grid-template-columns: 1fr; gap: 0; } }
+.ut-dir-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 8px 0 !important; }
+.ut-dir-label { font-size: .78rem; width: 4em; }
+.ut-dir-label.is-good { color: #2b8a3e; }
+.ut-dir-label.is-bad { color: #c92a2a; }
+.ut-dir { display: inline-flex; align-items: baseline; gap: 4px; padding: 3px 12px; border-radius: 999px; font-size: .9rem; font-weight: 700; }
+.ut-dir.is-good { background: #ebfbee; color: #2b8a3e; border: 1px solid #b2f2bb; }
+.ut-dir.is-bad { background: #fff5f5; color: #c92a2a; border: 1px solid #ffc9c9; }
+.ut-dir small { font-size: .68rem; font-weight: 400; }
+.ut-dir-none { font-size: .82rem; color: var(--c-muted, #777); }
+
+/* ---------- 今日のまとめ(ヒーロー) ---------- */
+.ut-hero { margin: 8px 0 28px; padding: 22px 18px; border-radius: var(--radius, 10px); color: #f6efff; background: radial-gradient(ellipse at top, #4b2a83, #2b1a4a 75%); }
+.ut-hero p { margin: 0; }
+.ut-hero-date { font-size: .85rem; opacity: .85; }
+.ut-hero-top { font-family: var(--font-heading, serif); font-size: 1.35rem; font-weight: 700; margin: 4px 0 14px !important; }
+.ut-hero-top a { color: #f3d36b; text-decoration: none; }
+.ut-hero-top .ut-symbol { margin-right: 4px; }
+.ut-letter { background: rgb(255 255 255 / .08); border: 1px solid rgb(255 255 255 / .15); border-radius: 8px; padding: 12px 14px; font-size: .9rem; line-height: 1.8; }
+.ut-letter-from { font-size: .75rem !important; color: #f3d36b; margin-bottom: 4px !important; }
+.ut-moon { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px !important; font-size: .85rem; }
+
+/* ---------- ランキングの「くわしく」 ---------- */
+.ut-rank-more { margin: 8px 0 0; font-size: .82rem; text-align: right; }
+.ut-rank-more a, .ut-more a:not(.atk-button) { color: var(--c-primary, #5f3dc4); text-decoration: none; font-weight: 700; }
+.ut-more { text-align: right; margin: 12px 0 0; }
+
+/* ---------- 詳しい運勢カード ---------- */
+.ut-top-detail, .ut-picker, .ut-faq, .ut-profile, .ut-other-signs, .ut-sign-cta { margin: 36px 0; }
+.ut-detail { margin-top: 12px; padding: 18px; border: 1px solid var(--c-border, #ddd); border-radius: var(--radius, 10px); background: var(--c-bg, #fff); }
+.ut-detail-flow { margin: 0 0 12px; }
+.ut-detail-flow b { display: block; font-size: .78rem; color: var(--c-primary, #5f3dc4); }
+.ut-cats { display: grid; gap: 10px; margin-bottom: 14px; }
+@media (min-width: 720px) { .ut-cats { grid-template-columns: repeat(3, 1fr); } }
+.ut-cat { background: var(--c-surface, #f5f5f5); border-radius: 8px; padding: 10px 12px; }
+.ut-cat p { margin: 0; font-size: .86rem; line-height: 1.7; }
+.ut-cat-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px !important; }
+.ut-cat-love .ut-cat-head b { color: #d6336c; }
+.ut-cat-work .ut-cat-head b { color: #1971c2; }
+.ut-cat-money .ut-cat-head b { color: #b8860b; }
+.ut-detail .ut-today-list a { color: var(--c-primary, #5f3dc4); }
+
+/* ---------- 誕生日から探す ---------- */
+.ut-picker { background: var(--c-surface, #f5f5f5); border-radius: var(--radius, 10px); padding: 20px; }
+.ut-picker-form select { flex: 1 1 90px; min-width: 0; font-size: 1rem; padding: 10px; border: 1px solid var(--c-border, #ccc); border-radius: 8px; background: var(--c-bg, #fff); color: var(--c-text, #222); font-family: inherit; }
+
+/* ---------- よくある質問 ---------- */
+.ut-faq-item { border-bottom: 1px solid var(--c-border, #ddd); padding: 12px 0; }
+.ut-faq-item summary { cursor: pointer; font-weight: 700; list-style: none; position: relative; padding-left: 1.6em; }
+.ut-faq-item summary::before { content: "Q"; position: absolute; left: 0; color: var(--c-primary, #5f3dc4); font-family: var(--font-heading, serif); }
+.ut-faq-item summary::-webkit-details-marker { display: none; }
+.ut-faq-item p { margin: 8px 0 0 1.6em; font-size: .9rem; }
+
+/* ---------- 星座ページ ---------- */
+.ut-sign-hero { text-align: center; padding: 28px 16px 22px; border-radius: var(--radius, 10px); color: #f6efff; background: radial-gradient(ellipse at top, #4b2a83, #2b1a4a 75%); }
+.ut-sign-hero p { margin: 0; }
+.ut-sign-symbol { font-size: 2.6rem; line-height: 1; color: #f3d36b; font-family: "Segoe UI Symbol", "Apple Symbols", "Noto Sans Symbols", sans-serif; }
+.ut-sign-name { font-size: clamp(1.4rem, 5vw, 1.9rem); margin: 8px 0 4px; color: #fff; }
+.ut-sign-period { font-size: .85rem; opacity: .85; }
+.ut-sign-rank { margin-top: 12px !important; display: inline-flex; align-items: baseline; gap: 4px; background: rgb(255 255 255 / .1); padding: 4px 18px; border-radius: 999px; font-size: .85rem; }
+.ut-sign-rank b { font-size: 1.8rem; color: #f3d36b; }
+.ut-sign-cta { text-align: center; }
+.ut-sign-cta .ut-more { text-align: center; }

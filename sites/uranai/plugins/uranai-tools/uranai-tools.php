@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Uranai Tools
  * Description: 今日の12星座ランキング(毎日0時に自動更新)と、生年月日から診断する九星気学。
- * Version: 0.1.1
+ * Version: 0.3.0
  * Requires PHP: 8.0
  *
  * ショートコード:
@@ -17,6 +17,8 @@ defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/data.php';
 require_once __DIR__ . '/kyusei.php';
+require_once __DIR__ . '/daily.php';
+require_once __DIR__ . '/pages.php';
 
 /* ==================================================================
  * 共通
@@ -146,6 +148,7 @@ function ut_zodiac_ranking_html( $atts = array() ) {
 		if ( 'low' === $r['tier'] ) {
 			$out .= '<p class="ut-advice"><b>開運アドバイス</b>' . esc_html( $r['advice'] ) . '</p>';
 		}
+		$out .= '<p class="ut-rank-more"><a href="' . esc_url( ut_sign_url( $r['key'] ) ) . '">' . esc_html( $r['name'] ) . 'のくわしい運勢 ›</a></p>';
 		$out .= '</div></li>';
 	}
 	$out .= '</ol>';
@@ -216,6 +219,9 @@ function ut_kyusei_result_html( DateTimeImmutable $birth ) {
 	$out .= '<p class="ut-honmei-sub">月命星:' . esc_html( $stars[ $getsu ]['name'] ) . ' / 五行:' . esc_html( $s['element'] ) . '</p>';
 	$out .= '</div>';
 
+	$out .= ut_kyusei_today_html( $honmei, $today );
+	$out .= ut_kyusei_directions_html( $honmei, $today );
+
 	$out .= '<h3>あなたの性格</h3><p>' . esc_html( $s['nature'] ) . '</p>';
 	$out .= '<p class="ut-getsu"><b>内面(月命星 ' . esc_html( $stars[ $getsu ]['name'] ) . ')</b>' . esc_html( $stars[ $getsu ]['inner'] ) . '</p>';
 
@@ -276,6 +282,63 @@ add_filter(
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		wp_enqueue_style( 'uranai-tools', plugins_url( 'assets/uranai-tools.css', __FILE__ ), array(), '0.1.0' );
+		wp_enqueue_style( 'uranai-tools', plugins_url( 'assets/uranai-tools.css', __FILE__ ), array(), '0.3.0' );
 	}
 );
+
+/* ==================================================================
+ * 九星気学: 今日の運勢と今月の方位
+ * ================================================================== */
+
+/** 今日の運勢(本命星と日付から決まる。同じ日・同じ本命星なら誰が見ても同じ) */
+function ut_kyusei_today( $honmei, DateTimeImmutable $today ) {
+	$seed  = 'kyusei-day-' . $today->format( 'Y-m-d' ) . '-' . $honmei;
+	$base  = ut_kyusei_palaces()[ ut_kyusei_palace( $honmei, ut_kyusei_getsumei( $today ) ) ]['score'];
+	$score = max( 1, min( 5, $base + (int) floor( ut_rand( $seed, 'score' ) * 3 ) - 1 ) );
+	$t     = ut_kyusei_daily_texts();
+	$pick  = fn( array $list, $key ) => $list[ (int) floor( ut_rand( $seed, $key ) * count( $list ) ) % count( $list ) ];
+	$color = $pick( ut_zodiac_texts()['colors'], 'color' );
+	return array(
+		'score' => $score,
+		'text'  => $pick( $t['score'][ $score ], 'text' ),
+		'do'    => $pick( $t['dos'], 'do' ),
+		'dont'  => $pick( $t['donts'], 'dont' ),
+		'color' => $color,
+	);
+}
+
+function ut_kyusei_today_html( $honmei, DateTimeImmutable $today ) {
+	$d   = ut_kyusei_today( $honmei, $today );
+	$w   = array( '日', '月', '火', '水', '木', '金', '土' )[ (int) $today->format( 'w' ) ];
+	$out = '<div class="ut-today">';
+	$out .= '<h3>今日の運勢<span class="ut-today-date">' . esc_html( $today->format( 'n月j日' ) . '(' . $w . ')' ) . '</span></h3>';
+	$out .= '<p class="ut-fortune-stars">' . ut_stars( $d['score'] ) . '</p>';
+	$out .= '<p>' . esc_html( $d['text'] ) . '</p>';
+	$out .= '<dl class="ut-today-list">';
+	$out .= '<div class="is-do"><dt>おすすめの行動</dt><dd>' . esc_html( $d['do'] ) . '</dd></div>';
+	$out .= '<div class="is-dont"><dt>今日やってはいけないこと</dt><dd>' . esc_html( $d['dont'] ) . '</dd></div>';
+	$out .= '<div><dt>ラッキーカラー</dt><dd><i class="ut-swatch" style="background:' . esc_attr( $d['color'][1] ) . '"></i>' . esc_html( $d['color'][0] ) . '</dd></div>';
+	$out .= '</dl></div>';
+	return $out;
+}
+
+function ut_kyusei_directions_html( $honmei, DateTimeImmutable $today ) {
+	$names = ut_direction_names();
+	$dir   = ut_kyusei_directions( $honmei, ut_kyusei_getsumei( $today ), ut_kyusei_month_index( $today ) );
+	$out   = '<div class="ut-directions">';
+	$out  .= '<h3>今月の方位<span class="ut-today-date">' . esc_html( $today->format( 'n' ) . '月' ) . '</span></h3>';
+	$out  .= '<p class="ut-dir-row"><b class="ut-dir-label is-good">吉方位</b>';
+	if ( $dir['good'] ) {
+		foreach ( $dir['good'] as $p ) {
+			$out .= '<span class="ut-dir is-good">' . esc_html( $names[ $p ] ) . '</span>';
+		}
+	} else {
+		$out .= '<span class="ut-dir-none">今月は吉方位がありません。遠出や引っ越しは来月以降の検討がおすすめです。</span>';
+	}
+	$out .= '</p><p class="ut-dir-row"><b class="ut-dir-label is-bad">凶方位</b>';
+	foreach ( $dir['bad'] as $p => $why ) {
+		$out .= '<span class="ut-dir is-bad">' . esc_html( $names[ $p ] ) . '<small>' . esc_html( implode( '・', $why ) ) . '</small></span>';
+	}
+	$out .= '</p><p class="ut-note">方位は、今の住まいから見た方角です。旅行・お出かけ・引っ越しの参考にどうぞ。</p>';
+	return $out . '</div>';
+}

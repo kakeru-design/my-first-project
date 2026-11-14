@@ -93,3 +93,63 @@ function ut_kyusei_near_boundary( DateTimeInterface $d ) {
 	$day = (int) $d->format( 'j' );
 	return abs( $day - ut_setsu_day( (int) $d->format( 'Y' ), (int) $d->format( 'n' ) ) ) <= 1;
 }
+
+/* ------------------------------------------------------------------
+ * 方位(月盤による今月の吉方位・凶方位)
+ * 宮の番号は後天定位(1北 2南西 3東 4南東 5中央 6北西 7西 8北東 9南)。
+ * ------------------------------------------------------------------ */
+
+function ut_direction_names() {
+	return array( 1 => '北', 2 => '南西', 3 => '東', 4 => '南東', 5 => '中央', 6 => '北西', 7 => '西', 8 => '北東', 9 => '南' );
+}
+
+/** 向かい側の宮 */
+function ut_opposite_palace( $p ) {
+	return 5 === $p ? 5 : 10 - $p;
+}
+
+/** 盤の中央が $center のとき、宮 $p にいる星 */
+function ut_star_at( $p, $center ) {
+	return ut_wrap9( $p + $center - 5 );
+}
+
+/** 九星気学上の月(寅月=1 … 丑月=12)の月破の宮 */
+function ut_month_break_palace( $month_index ) {
+	// 寅から順に十二支の方位(宮番号)
+	$branch = array( 8, 3, 4, 4, 9, 2, 2, 7, 6, 6, 1, 8 ); // 寅卯辰巳午未申酉戌亥子丑
+	return $branch[ ( $month_index - 1 + 6 ) % 12 ];
+}
+
+/**
+ * 本命星 $honmei にとっての方位
+ * @return array{good: int[], bad: array<int, string[]>} 宮番号の配列/宮番号 => 理由
+ */
+function ut_kyusei_directions( $honmei, $center, $month_index ) {
+	$bad = array();
+	$add = function ( $p, $why ) use ( &$bad ) {
+		if ( 5 !== $p ) {
+			$bad[ $p ][] = $why;
+		}
+	};
+	$go  = ut_kyusei_palace( 5, $center );       // 五黄土星のいる宮
+	$me  = ut_kyusei_palace( $honmei, $center ); // 本命星のいる宮
+	if ( 5 !== $go ) {
+		$add( $go, '五黄殺' );
+		$add( ut_opposite_palace( $go ), '暗剣殺' );
+	}
+	if ( 5 !== $me ) {
+		$add( $me, '本命殺' );
+		$add( ut_opposite_palace( $me ), '本命的殺' );
+	}
+	$add( ut_month_break_palace( $month_index ), '月破' );
+
+	$partners = ut_kyusei_good_partners( $honmei );
+	$good     = array();
+	foreach ( array( 1, 8, 3, 4, 9, 2, 7, 6 ) as $p ) { // 北から時計回り
+		if ( ! isset( $bad[ $p ] ) && in_array( ut_star_at( $p, $center ), $partners, true ) ) {
+			$good[] = $p;
+		}
+	}
+	ksort( $bad );
+	return array( 'good' => $good, 'bad' => $bad );
+}

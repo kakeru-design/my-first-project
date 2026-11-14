@@ -64,6 +64,7 @@ add_action(
 		} else {
 			$desc = get_bloginfo( 'description' );
 		}
+		$desc = apply_filters( 'affiliate_base_meta_description', $desc );
 		if ( $desc ) {
 			echo '<meta name="description" content="' . esc_attr( wp_strip_all_tags( $desc ) ) . "\">\n";
 		}
