@@ -37,8 +37,17 @@ add_action(
 		} elseif ( current_user_can( 'activate_plugins' ) ) {
 			echo '<p class="atk-warning">Uranai Tools プラグインを有効化してください。</p>';
 		}
-		echo '<h2 class="section-title">おすすめ電話占いランキング</h2>';
-		echo do_shortcode( '[aff_ranking slugs="uranai-a,uranai-b,uranai-c"]' );
+		// 提携リンクが未設定(仮置き)の案件は一般の閲覧者に見せない。管理者には案内だけ出す。
+		$slugs = array( 'uranai-a', 'uranai-b', 'uranai-c' );
+		$ready = function_exists( 'atk_link' )
+			? array_values( array_filter( $slugs, fn( $s ) => atk_link( $s ) && ! atk_is_placeholder( atk_link( $s ) ) ) )
+			: array();
+		if ( $ready ) {
+			echo '<h2 class="section-title">おすすめ電話占いランキング</h2>';
+			echo do_shortcode( '[aff_ranking slugs="' . esc_attr( implode( ',', $ready ) ) . '"]' );
+		} elseif ( current_user_can( 'edit_posts' ) ) {
+			echo '<p class="atk-warning">[管理者のみ表示] 電話占いランキングは、affiliate-links.json に提携URLを設定すると表示されます。</p>';
+		}
 	}
 );
 
