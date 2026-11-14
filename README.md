@@ -2,8 +2,8 @@
 
 | サイト | 子テーマ | ローカルURL |
 |---|---|---|
-| 占いサイト | `sites/uranai/themes/uranai-child` | http://localhost:8081 |
-| アダルトサイト | `sites/adult/themes/adult-child` | http://localhost:8082 |
+| 占いサイト「運勢日和」(unsei-biyori.com) | `sites/uranai/themes/uranai-child` | http://localhost:8081 |
+| アダルトサイト「ファンズピック」(fanz-pick.com) | `sites/adult/themes/adult-child` | http://localhost:8082 |
 
 ## 構成
 ```
