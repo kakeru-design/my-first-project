@@ -147,3 +147,41 @@
 .ut-sign-rank b { font-size: 1.8rem; color: #f3d36b; }
 .ut-sign-cta { text-align: center; }
 .ut-sign-cta .ut-more { text-align: center; }
+
+/* ---------- 読みものページ共通 ---------- */
+.ut-page-title { font-size: clamp(1.4rem, 4.5vw, 1.8rem); margin: 8px 0 12px; }
+.ut-article .ut-date { margin: -4px 0 16px; }
+.ut-compat-links { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+@media (min-width: 640px) { .ut-compat-links { grid-template-columns: repeat(4, 1fr); } }
+.ut-compat-links a { display: flex; align-items: center; gap: 6px; padding: 8px 10px; border: 1px solid var(--c-border, #ddd); border-radius: 8px; text-decoration: none; color: var(--c-text, #222); font-size: .86rem; background: var(--c-bg, #fff); }
+.ut-compat-links .ut-symbol { color: var(--c-primary, #5f3dc4); }
+.ut-compat-links b { margin-left: auto; color: var(--c-accent, #d6336c); font-size: .8rem; }
+.ut-bday-grid { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.ut-bday-grid a { display: block; text-align: center; padding: 6px 0; border: 1px solid var(--c-border, #ddd); border-radius: 6px; text-decoration: none; color: var(--c-text, #222); font-size: .8rem; background: var(--c-bg, #fff); }
+.ut-bday-month { margin: 24px 0; }
+.ut-pager { display: flex; justify-content: space-between; gap: 8px; margin: 28px 0 8px; font-size: .88rem; }
+.ut-pager a { color: var(--c-primary, #5f3dc4); text-decoration: none; font-weight: 700; }
+.ut-moon-next { text-align: center; padding: 18px; margin: 16px 0 20px; border-radius: var(--radius, 10px); color: #f6efff; background: radial-gradient(ellipse at top, #4b2a83, #2b1a4a 75%); }
+.ut-moon-next p { margin: 0; }
+.ut-moon-date { font-family: var(--font-heading, serif); font-size: 1.3rem; font-weight: 700; color: #f3d36b; margin: 4px 0 !important; }
+.ut-moon-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+.ut-moon-table th, .ut-moon-table td { border-bottom: 1px solid var(--c-border, #ddd); padding: 8px 4px; text-align: left; vertical-align: top; }
+.ut-moon-table th { font-size: .75rem; color: var(--c-muted, #777); }
+.ut-moon-table tr.is-full td:nth-child(2) { color: #b8860b; font-weight: 700; }
+.ut-moon-table tr.is-new td:nth-child(2) { color: #5f3dc4; font-weight: 700; }
+.ut-moon-table td:first-child { white-space: nowrap; }
+.ut-reading { margin: 36px 0; }
+.ut-reading-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+@media (min-width: 640px) { .ut-reading-list { grid-template-columns: repeat(2, 1fr); } }
+.ut-reading-list a { display: block; padding: 14px 16px; border: 1px solid var(--c-border, #ddd); border-left: 4px solid #c9a227; border-radius: 8px; text-decoration: none; color: var(--c-text, #222); background: var(--c-bg, #fff); }
+.ut-reading-list b { display: block; font-size: 1rem; }
+.ut-reading-list span { font-size: .8rem; color: var(--c-muted, #777); }
+.ut-moon-list { list-style: none; padding: 0; margin: 0; }
+.ut-moon-list li { border-bottom: 1px solid var(--c-border, #ddd); padding: 10px 2px; }
+.ut-moon-list p { margin: 0; }
+.ut-moon-when { font-size: .9rem; font-weight: 700; display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.ut-moon-type { font-size: .8rem; }
+.is-full .ut-moon-type { color: #b8860b; }
+.is-new .ut-moon-type { color: #5f3dc4; }
+.ut-moon-theme { font-size: .84rem; color: var(--c-muted, #666); }
+.ut-moon-theme b { color: var(--c-text, #222); margin-right: 8px; font-weight: 700; }

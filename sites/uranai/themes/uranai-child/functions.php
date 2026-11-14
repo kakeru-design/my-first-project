@@ -51,6 +51,9 @@ add_action(
 		} elseif ( current_user_can( 'edit_posts' ) ) {
 			echo '<p class="atk-warning">[管理者のみ表示] 電話占いランキングは、affiliate-links.json に提携URLを設定すると表示されます。</p>';
 		}
+		if ( shortcode_exists( 'uranai_reading_links' ) ) {
+			echo do_shortcode( '[uranai_reading_links]' );
+		}
 		if ( shortcode_exists( 'uranai_faq' ) ) {
 			echo do_shortcode( '[uranai_faq]' );
 		}
