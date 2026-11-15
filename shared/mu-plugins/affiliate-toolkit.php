@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Affiliate Toolkit
  * Description: 2サイト共通のアフィリエイト機能(PR表記・リンク管理・ボタン・ランキング)。mu-plugins に設置して使う。
- * Version: 0.2.0
+ * Version: 0.3.0
  *
  * 案件データはテーマ側で `atk_links` フィルタから渡す(子テーマの affiliate-links.json)。
  *   [aff_button slug="xxx"]            … CTAボタン
@@ -306,4 +306,66 @@ document.addEventListener('click', function (e) {
 		<?php
 	},
 	2
+);
+
+/* ------------------------------------------------------------------
+ * Amazonアソシエイト
+ * 設定 → 一般 の「Amazon トラッキングID」(例: xxxxx-22)を入れると、
+ * atk_amazon_link_html() がAmazonの検索結果へのアフィリエイトリンクを返す。
+ * あわせて、Amazonアソシエイトの規約で必要な表記をフッターに出す。
+ * ※Amazonアソシエイトは成人向けサイトでの利用が認められていないため、ファンズピックでは設定しないこと。
+ * ------------------------------------------------------------------ */
+add_action(
+	'admin_init',
+	function () {
+		register_setting(
+			'general',
+			'atk_amazon_tag',
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => fn( $v ) => preg_match( '/^[a-z0-9][a-z0-9-]{1,40}-2[0-9]$/i', trim( (string) $v ) ) ? trim( (string) $v ) : '',
+				'default'           => '',
+			)
+		);
+		add_settings_field(
+			'atk_amazon_tag',
+			'Amazon トラッキングID',
+			function () {
+				printf(
+					'<input name="atk_amazon_tag" id="atk_amazon_tag" type="text" class="regular-text" placeholder="xxxxx-22" value="%s"><p class="description">AmazonアソシエイトのトラッキングIDを入れると、ラッキーアイテムなどがAmazonへのリンクになります。成人向けサイトでは設定しないでください。</p>',
+					esc_attr( get_option( 'atk_amazon_tag', '' ) )
+				);
+			},
+			'general'
+		);
+	}
+);
+
+function atk_amazon_tag() {
+	return (string) get_option( 'atk_amazon_tag', '' );
+}
+
+/** キーワードでAmazonを検索するアフィリエイトURL(トラッキングID未設定なら空) */
+function atk_amazon_search_url( $keyword ) {
+	$tag = atk_amazon_tag();
+	return $tag ? 'https://www.amazon.co.jp/s?k=' . rawurlencode( $keyword ) . '&tag=' . rawurlencode( $tag ) : '';
+}
+
+/** キーワードをAmazonへのリンクにする(未設定ならテキストのまま) */
+function atk_amazon_link_html( $keyword, $label = '' ) {
+	$label = $label ? $label : $keyword;
+	$url   = atk_amazon_search_url( $keyword );
+	if ( ! $url ) {
+		return esc_html( $label );
+	}
+	return '<a class="atk-amazon" href="' . esc_url( $url ) . '" rel="sponsored nofollow noopener" target="_blank">' . esc_html( $label ) . '</a><small class="atk-pr-mark">(PR:Amazon)</small>';
+}
+
+add_action(
+	'affiliate_base_footer_notes',
+	function () {
+		if ( atk_amazon_tag() ) {
+			echo '<p>Amazonのアソシエイトとして、当サイトは適格販売により収入を得ています。</p>';
+		}
+	}
 );
