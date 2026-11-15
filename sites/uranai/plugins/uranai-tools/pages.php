@@ -8,13 +8,14 @@
  *   /tanjobi/{月}-{日}/   誕生日別の性格(366)
  *   /shukan/              今週の12星座ランキング
  *   /tsuki/               新月・満月カレンダー
+ *   /kaiun/               開運グッズ
  */
 
 defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/content.php';
 
-const UT_REWRITE_VERSION = '2';
+const UT_REWRITE_VERSION = '3';
 
 add_action(
 	'init',
@@ -26,6 +27,7 @@ add_action(
 		add_rewrite_rule( '^tanjobi/([0-9]{1,2})-([0-9]{1,2})/?$', 'index.php?ut_view=tanjobi&ut_a=$matches[1]&ut_b=$matches[2]', 'top' );
 		add_rewrite_rule( '^shukan/?$', 'index.php?ut_view=shukan', 'top' );
 		add_rewrite_rule( '^tsuki/?$', 'index.php?ut_view=tsuki', 'top' );
+		add_rewrite_rule( '^kaiun/?$', 'index.php?ut_view=kaiun', 'top' );
 		// プラグインを入れ替えたとき(有効化フックが走らない)にも一度だけ反映する
 		if ( get_option( 'ut_rewrite_version' ) !== UT_REWRITE_VERSION ) {
 			flush_rewrite_rules( false );
@@ -68,7 +70,7 @@ function ut_view() {
 		$cache = ut_birthday_valid( $a, $b ) && ltrim( $a, '0' ) === $a && ltrim( $b, '0' ) === $b
 			? array( 'view' => 'tanjobi', 'a' => (int) $a, 'b' => (int) $b )
 			: array( 'view' => '404' );
-	} elseif ( in_array( $view, array( 'shukan', 'tsuki' ), true ) ) {
+	} elseif ( in_array( $view, array( 'shukan', 'tsuki', 'kaiun' ), true ) ) {
 		$cache = array( 'view' => $view );
 	} else {
 		$cache = array( 'view' => '404' );
@@ -197,6 +199,12 @@ function ut_view_meta( array $v ) {
 				'desc'  => '今週(' . $w['monday']->format( 'n月j日' ) . '〜)の12星座ランキング。1位は' . $w['list'][0]['name'] . '。星座ごとの今週のキーワードとラッキーデーも。',
 				'crumb' => array( array( '', '今週の12星座ランキング' ) ),
 			);
+		case 'kaiun':
+			return array(
+				'title' => '開運グッズ・お守りアイテム',
+				'desc'  => '天然石・お守り・新月の願い事ノート・金運小物など、毎日の開運習慣のおともになるアイテムを紹介。12星座別・九星(本命星)別のラッキーアイテムも。',
+				'crumb' => array( array( '', '開運グッズ' ) ),
+			);
 		case 'tsuki':
 			return array(
 				'title' => '新月・満月カレンダー' . $today->format( 'Y' ) . '|日時と星座・願い事のテーマ',
@@ -224,6 +232,8 @@ function ut_view_html( array $v ) {
 			return ut_weekly_html();
 		case 'tsuki':
 			return ut_moon_calendar_html();
+		case 'kaiun':
+			return ut_kaiun_page_html();
 	}
 	return '';
 }
@@ -293,6 +303,8 @@ function ut_sign_page_html( $key ) {
 	}
 	$out .= '</nav><p class="ut-more"><a href="' . esc_url( home_url( '/' ) ) . '#zodiac-ranking">今日の12星座ランキングを見る ›</a></p></section>';
 
+	$out .= '<p class="ut-more"><a href="' . esc_url( home_url( '/kaiun/' ) ) . '#kaiun-signs">' . esc_html( $d['name'] ) . 'のラッキーアイテム・開運グッズを見る ›</a></p>';
+
 	$out .= '<section class="ut-sign-cta"><h2 class="ut-title">生年月日で、もっとくわしく</h2><p>九星気学の診断では、生年月日からあなたの本命星・今日の運勢・今月の吉方位がわかります。</p>';
 	$out .= '<p class="ut-more"><a class="atk-button" href="' . esc_url( home_url( '/' ) ) . '#kyusei">無料で診断する</a></p></section>';
 
@@ -306,7 +318,7 @@ function ut_sign_page_html( $key ) {
 
 /** プラグインが用意する全ページのURL */
 function ut_all_view_urls() {
-	$urls = array( home_url( '/shukan/' ), home_url( '/tsuki/' ), home_url( '/aisho/' ), home_url( '/tanjobi/' ) );
+	$urls = array( home_url( '/shukan/' ), home_url( '/tsuki/' ), home_url( '/aisho/' ), home_url( '/tanjobi/' ), home_url( '/kaiun/' ) );
 	$keys = ut_sign_keys();
 	foreach ( $keys as $k ) {
 		$urls[] = ut_sign_url( $k );

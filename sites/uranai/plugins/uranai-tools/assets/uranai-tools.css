@@ -185,3 +185,33 @@
 .is-new .ut-moon-type { color: #5f3dc4; }
 .ut-moon-theme { font-size: .84rem; color: var(--c-muted, #666); }
 .ut-moon-theme b { color: var(--c-text, #222); margin-right: 8px; font-weight: 700; }
+
+/* ---------- 月の満ち欠け(Fチーム) ---------- */
+.ut-moon-svg { display: block; flex: none; }
+.ut-moon-today.is-compact { display: flex; align-items: center; gap: 10px; margin: 12px 0 0 !important; font-size: .85rem; }
+.ut-moon-today.is-compact b { display: block; color: #f3d36b; font-size: .9rem; }
+.ut-moon-now { margin: 20px 0 28px; }
+.ut-moon-today:not(.is-compact) { display: grid; grid-template-columns: auto 1fr; gap: 12px 16px; align-items: center; padding: 18px; border-radius: var(--radius, 10px); color: #f6efff; background: radial-gradient(ellipse at top, #4b2a83, #2b1a4a 75%); }
+.ut-moon-today p { margin: 0; }
+.ut-moon-today-label { font-size: .8rem; opacity: .85; }
+.ut-moon-today-name { font-family: var(--font-heading, serif); font-size: 1.5rem; font-weight: 700; color: #f3d36b; }
+.ut-moon-today-data { font-size: .85rem; }
+.ut-moon-today-word { grid-column: 1 / -1; font-size: .88rem; line-height: 1.8; background: rgb(255 255 255 / .08); border-radius: 8px; padding: 10px 12px; }
+.ut-moon-today-word b { display: block; font-size: .72rem; color: #f3d36b; }
+.ut-moon-month { margin: 28px 0 36px; }
+.ut-moon-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px; }
+.ut-moon-grid-head { text-align: center; font-size: .7rem; color: var(--c-muted, #777); padding: 2px 0; }
+.ut-moon-cell { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 0 5px; border-radius: 6px; background: var(--c-surface, #f3effa); min-width: 0; }
+.ut-moon-cell.is-blank { background: transparent; }
+.ut-moon-day { font-size: .72rem; font-weight: 700; line-height: 1.2; }
+.ut-moon-age { font-size: .62rem; color: var(--c-muted, #777); line-height: 1.2; }
+.ut-moon-ev { font-size: .62rem; font-weight: 700; line-height: 1.2; text-align: center; color: var(--c-primary, #5f3dc4); }
+.ut-moon-ev small { display: block; font-weight: 400; font-size: .58rem; color: var(--c-muted, #777); }
+.ut-moon-cell.is-new, .ut-moon-cell.is-full { background: #2b1a4a; }
+.ut-moon-cell.is-new .ut-moon-day, .ut-moon-cell.is-full .ut-moon-day, .ut-moon-cell.is-new .ut-moon-ev, .ut-moon-cell.is-full .ut-moon-ev { color: #f3d36b; }
+.ut-moon-cell.is-new small, .ut-moon-cell.is-full small { color: #d9cdf0; }
+.ut-moon-cell.is-first, .ut-moon-cell.is-last { outline: 1.5px solid #c9a227; outline-offset: -1.5px; }
+.ut-moon-cell.is-today { box-shadow: 0 0 0 2px var(--c-accent, #d6336c); }
+.ut-moon-keydays { list-style: none; padding: 0; margin: 12px 0 4px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; font-size: .82rem; }
+.ut-moon-keydays li { background: var(--c-surface, #f3effa); border-radius: 6px; padding: 6px 10px; }
+.ut-moon-keydays b { margin-right: 8px; color: var(--c-primary, #5f3dc4); }

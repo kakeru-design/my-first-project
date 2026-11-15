@@ -1,0 +1,19 @@
+/* 開運グッズページ(/kaiun/) */
+.ut-kaiun-pr { font-size: .8rem; color: var(--c-muted, #777); background: var(--c-surface, #f3f3f3); border-radius: 6px; padding: 8px 12px; }
+.ut-kaiun-pr span { display: inline-block; background: var(--c-muted, #777); color: #fff; font-weight: 700; font-size: .7rem; padding: 1px 6px; border-radius: 3px; margin-right: 8px; }
+.ut-kaiun-intro { color: var(--c-text, #222); background: var(--c-surface, #f3effa); border-color: var(--c-border, #ddd); margin: 16px 0; }
+.ut-kaiun-intro .ut-letter-from { color: var(--c-primary, #5f3dc4); }
+.ut-kaiun-toc { display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 8px; }
+.ut-kaiun-toc a { font-size: .8rem; padding: 4px 12px; border: 1px solid var(--c-border, #ddd); border-radius: 999px; color: var(--c-primary, #5f3dc4); text-decoration: none; background: var(--c-bg, #fff); }
+.ut-kaiun-sec { margin: 32px 0; scroll-margin-top: 16px; }
+.ut-kaiun-sec .ut-lead { margin: 6px 0 12px; }
+.ut-kaiun-items { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+@media (min-width: 640px) { .ut-kaiun-items { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.ut-kaiun-items li { border: 1px solid var(--c-border, #ddd); border-left: 4px solid #c9a227; border-radius: 8px; padding: 12px 14px; background: var(--c-bg, #fff); min-width: 0; }
+.ut-kaiun-items p { margin: 0; overflow-wrap: anywhere; }
+.ut-kaiun-name { font-weight: 700; font-size: .95rem; }
+.ut-kaiun-note { font-size: .82rem; color: var(--c-muted, #666); line-height: 1.7; margin-top: 4px !important; }
+.ut-kaiun-sign { font-size: .78rem; margin-bottom: 4px !important; }
+.ut-kaiun-sign a { color: var(--c-primary, #5f3dc4); text-decoration: none; font-weight: 700; }
+.ut-kaiun-sign .ut-symbol { margin-right: 4px; }
+.ut-kaiun-color { font-size: .82rem; margin-bottom: 4px !important; }
