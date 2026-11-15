@@ -77,7 +77,7 @@ function ut_sign_detail_html( array $d, $heading = '' ) {
 	$p    = $signs[ $d['partner'] ];
 	$out .= '<div><dt>相性の良い星座</dt><dd><a href="' . esc_url( ut_sign_url( $d['partner'] ) ) . '">' . esc_html( $p['symbol'] . ' ' . $p['name'] ) . '</a></dd></div>';
 	$out .= '<div><dt>ラッキーカラー</dt><dd><i class="ut-swatch" style="background:' . esc_attr( $d['color'][1] ) . '"></i>' . esc_html( $d['color'][0] ) . '</dd></div>';
-	$out .= '<div><dt>ラッキーアイテム</dt><dd>' . esc_html( $d['item'] ) . '</dd></div>';
+	$out .= '<div><dt>ラッキーアイテム</dt><dd>' . ut_item_html( $d['item'] ) . '</dd></div>';
 	if ( 'low' === $d['tier'] ) {
 		$out .= '<div class="is-do"><dt>開運アドバイス</dt><dd>' . esc_html( $d['advice'] ) . '</dd></div>';
 	}

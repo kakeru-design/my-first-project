@@ -1,7 +1,7 @@
 /*
 Theme Name: Affiliate Base
 Description: アフィリエイトサイト用の軽量な親テーマ。色やフォントは子テーマの CSS 変数で切り替える。
-Version: 0.1.2
+Version: 0.1.3
 Text Domain: affiliate-base
 */
 
@@ -117,3 +117,6 @@ h1, h2, h3, h4 { font-family: var(--font-heading); line-height: 1.4; }
 .atk-table { min-width: 560px; font-size: .9rem; text-align: center; }
 .atk-table thead th { background: var(--c-primary); color: var(--c-primary-text); }
 .atk-table tbody th { background: var(--c-surface); white-space: nowrap; }
+
+.atk-pr-mark { font-size: .68rem; color: var(--c-muted); margin-left: 3px; }
+.atk-amazon { color: inherit; text-decoration: underline; text-decoration-color: var(--c-accent); text-underline-offset: 3px; }

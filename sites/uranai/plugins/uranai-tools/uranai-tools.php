@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Uranai Tools
  * Description: 今日の12星座ランキング(毎日0時に自動更新)と、生年月日から診断する九星気学。
- * Version: 0.4.0
+ * Version: 0.4.1
  * Requires PHP: 8.0
  *
  * ショートコード:
@@ -144,7 +144,7 @@ function ut_zodiac_ranking_html( $atts = array() ) {
 		}
 		$out .= '</dl>';
 		$out .= '<p class="ut-lucky"><span><b>ラッキーカラー</b><i class="ut-swatch" style="background:' . esc_attr( $r['color'][1] ) . '"></i>' . esc_html( $r['color'][0] ) . '</span>'
-			. '<span><b>ラッキーアイテム</b>' . esc_html( $r['item'] ) . '</span></p>';
+			. '<span><b>ラッキーアイテム</b>' . ut_item_html( $r['item'] ) . '</span></p>';
 		if ( 'low' === $r['tier'] ) {
 			$out .= '<p class="ut-advice"><b>開運アドバイス</b>' . esc_html( $r['advice'] ) . '</p>';
 		}
@@ -282,7 +282,7 @@ add_filter(
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		wp_enqueue_style( 'uranai-tools', plugins_url( 'assets/uranai-tools.css', __FILE__ ), array(), '0.4.0' );
+		wp_enqueue_style( 'uranai-tools', plugins_url( 'assets/uranai-tools.css', __FILE__ ), array(), '0.4.1' );
 	}
 );
 
@@ -341,4 +341,9 @@ function ut_kyusei_directions_html( $honmei, DateTimeImmutable $today ) {
 	}
 	$out .= '</p><p class="ut-note">方位は、今の住まいから見た方角です。旅行・お出かけ・引っ越しの参考にどうぞ。</p>';
 	return $out . '</div>';
+}
+
+/** ラッキーアイテム(Amazonアソシエイト設定時はリンク) */
+function ut_item_html( $item ) {
+	return function_exists( 'atk_amazon_link_html' ) ? atk_amazon_link_html( $item ) : esc_html( $item );
 }
