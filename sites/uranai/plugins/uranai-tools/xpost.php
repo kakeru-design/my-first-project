@@ -314,7 +314,7 @@ function ut_intro_post( ?DateTimeImmutable $today = null ) {
 						array( 'opt' => $c['total'] ),
 						'',
 						'恋愛では、' . $c['love'],
-						array( 'opt' => 'うまくいくコツは、' . $c['tip'] ),
+						array( 'opt' => '二人がうまくいくコツ:' . $c['tip'] ),
 						'',
 						'サイトでは78通りの相性をすべて載せています。気になるあの人の星座も、そっとのぞいてみてくださいね。',
 						$url,
