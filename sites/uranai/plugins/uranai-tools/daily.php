@@ -151,6 +151,7 @@ function ut_today_hero_html() {
 	$out .= '<p class="ut-hero-date">' . esc_html( $today->format( 'Y年n月j日' ) . '(' . ut_weekday( $today ) . ')' ) . 'の運勢</p>';
 	$out .= '<p class="ut-hero-top">今日の1位は <a href="' . esc_url( ut_sign_url( $top['key'] ) ) . '"><span class="ut-symbol" aria-hidden="true">' . esc_html( $top['symbol'] ) . '</span>' . esc_html( $top['name'] ) . '</a></p>';
 	$out .= '<div class="ut-letter"><p class="ut-letter-from">月詠灯からのひとこと</p><p>' . esc_html( $msg ) . '</p></div>';
+	$out .= function_exists( 'ut_moon_today_html' ) ? ut_moon_today_html( $today, true ) : '';
 	$out .= '<p class="ut-moon"><span>🌑 次の新月 <b>' . esc_html( $md( $moons['new'] ) ) . '</b></span><span>🌕 次の満月 <b>' . esc_html( $md( $moons['full'] ) ) . '</b></span></p>';
 	return $out . '</section>';
 }

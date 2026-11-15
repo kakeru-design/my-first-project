@@ -19,6 +19,7 @@ require_once __DIR__ . '/data.php';
 require_once __DIR__ . '/kyusei.php';
 require_once __DIR__ . '/daily.php';
 require_once __DIR__ . '/pages.php';
+require_once __DIR__ . '/kaiun.php';
 require_once __DIR__ . '/xpost.php';
 
 /* ==================================================================

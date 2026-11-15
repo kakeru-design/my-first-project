@@ -6,6 +6,7 @@
 defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/content-data.php';
+require_once __DIR__ . '/moon.php';
 
 function ut_sign_keys() {
 	return array_keys( ut_zodiac_signs() );
@@ -275,8 +276,11 @@ function ut_moon_calendar_html() {
 	$s     = ut_zodiac_signs();
 	$th    = ut_moon_themes();
 	$list  = ut_moon_calendar( $today );
-	$out   = '<article class="ut-article"><h1 class="ut-page-title">新月・満月カレンダー</h1>';
+	$out   = '<article class="ut-article"><h1 class="ut-page-title">月の満ち欠けと新月・満月カレンダー</h1>';
 	$out  .= '<p>新月は「始まり」、満月は「満ちる・手放す」のタイミング。新月の日には願い事を、満月の日には手放したいことを書き出してみるのがおすすめです。月が入る星座ごとのテーマも参考にしてください。</p>';
+	$out  .= '<section class="ut-moon-now"><h2 class="ut-title">今日の月の満ち欠け</h2>' . ut_moon_today_html( $today ) . '</section>';
+	$out  .= ut_moon_month_html( $today );
+	$out  .= '<h2 class="ut-title">新月・満月カレンダー(1年分)</h2>';
 	$next  = $list[0];
 	$out  .= '<div class="ut-moon-next"><p>' . ( $next['full'] ? '🌕 次の満月' : '🌑 次の新月' ) . '</p><p class="ut-moon-date">' . esc_html( $next['dt']->format( 'Y年n月j日' ) . '(' . ut_weekday( $next['dt'] ) . ')' . $next['dt']->format( 'G:i' ) ) . '</p>';
 	$out  .= '<p>' . esc_html( $s[ $next['sign'] ]['name'] . 'の' . ( $next['full'] ? '満月' : '新月' ) . ':' . $th[ $next['sign'] ][ $next['full'] ? 1 : 0 ] ) . '</p></div>';
@@ -298,6 +302,7 @@ function ut_reading_links_html() {
 		array( home_url( '/aisho/' ), '12星座の相性', '恋愛・友情・仕事の相性78通り' ),
 		array( home_url( '/tanjobi/' ), '誕生日別の性格', '366日それぞれの性格と恋愛傾向' ),
 		array( home_url( '/tsuki/' ), '新月・満月カレンダー', '願い事と手放しのタイミング' ),
+		array( home_url( '/kaiun/' ), '開運グッズ', '天然石・お守り・星座別ラッキーアイテム' ),
 	);
 	$out = '<section class="ut-reading"><h2 class="ut-title">読みもの</h2><ul class="ut-reading-list">';
 	foreach ( $items as [ $url, $title, $sub ] ) {
