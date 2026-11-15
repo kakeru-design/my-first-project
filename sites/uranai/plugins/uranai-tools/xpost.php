@@ -489,8 +489,12 @@ function ut_intro_post( ?DateTimeImmutable $today = null ) {
 			);
 
 		case 6: // 土: 月の満ち欠け
-			$age   = ut_intro_moon_age( $today );
+			// サイトの「今日の月」(moon.php)と同じ月齢・月相名を使う
+			$age   = function_exists( 'ut_moon_age' ) ? ut_moon_age( $today ) : ut_intro_moon_age( $today );
 			[ $phase, $msg ] = ut_intro_moon_phase( $age );
+			if ( function_exists( 'ut_moon_phase_name' ) ) {
+				$phase = ut_moon_phase_name( $age );
+			}
 			$moons = ut_next_moons( $today );
 			$next  = $moons['new'] < $moons['full'] ? array( '新月', $moons['new'] ) : array( '満月', $moons['full'] );
 			$nd    = $next[1]->format( 'n月j日' ) . '(' . ut_weekday( $next[1] ) . ')';
