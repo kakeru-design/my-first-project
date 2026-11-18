@@ -141,6 +141,35 @@ function ut_x_posts( ?DateTimeImmutable $today = null ) {
 			),
 		);
 	}
+	// 5. 吉日(一粒万倍日・天赦日など)の前日と当日
+	if ( function_exists( 'ut_kichijitsu' ) ) {
+		$types = ut_kichijitsu_types();
+		foreach ( array( 0 => '今日', 1 => '明日' ) as $offset => $when ) {
+			$day  = $today->modify( "+{$offset} day" );
+			$hits = array_values( array_filter( ut_kichijitsu( $day ), fn( $k ) => in_array( $k, array( 'tensha', 'ichiryu', 'tora', 'tsuchinotomi' ), true ) ) );
+			if ( ! $hits ) {
+				continue;
+			}
+			$names   = implode( '・', array_map( fn( $k ) => $types[ $k ]['name'], $hits ) );
+			$main    = $types[ $hits[0] ];
+			$posts[] = array(
+				'label' => '吉日(' . ( $offset ? '前日' : '当日' ) . '): ' . $names,
+				'text'  => ut_x_compose(
+					array(
+						'✦' . $when . ut_md_w( $day ) . 'は' . $names,
+						'',
+						$main['short'] . 'といわれる日です。',
+						array( 'opt' => 'この日にいいこと: ' . $main['do'] ),
+						'',
+						$offset ? '始めたいことを、今夜のうちに書き出してみてくださいね🌙' : '小さな一歩を、今日始めてみませんか🌙',
+						home_url( '/kichijitsu/' ),
+						'#' . $main['name'] . ' #開運日',
+					)
+				),
+			);
+		}
+	}
+
 	return $posts;
 }
 

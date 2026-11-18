@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/content.php';
 
-const UT_REWRITE_VERSION = '3';
+const UT_REWRITE_VERSION = '4';
 
 add_action(
 	'init',
@@ -28,6 +28,7 @@ add_action(
 		add_rewrite_rule( '^shukan/?$', 'index.php?ut_view=shukan', 'top' );
 		add_rewrite_rule( '^tsuki/?$', 'index.php?ut_view=tsuki', 'top' );
 		add_rewrite_rule( '^kaiun/?$', 'index.php?ut_view=kaiun', 'top' );
+		add_rewrite_rule( '^kichijitsu/?$', 'index.php?ut_view=kichijitsu', 'top' );
 		// プラグインを入れ替えたとき(有効化フックが走らない)にも一度だけ反映する
 		if ( get_option( 'ut_rewrite_version' ) !== UT_REWRITE_VERSION ) {
 			flush_rewrite_rules( false );
@@ -70,7 +71,7 @@ function ut_view() {
 		$cache = ut_birthday_valid( $a, $b ) && ltrim( $a, '0' ) === $a && ltrim( $b, '0' ) === $b
 			? array( 'view' => 'tanjobi', 'a' => (int) $a, 'b' => (int) $b )
 			: array( 'view' => '404' );
-	} elseif ( in_array( $view, array( 'shukan', 'tsuki', 'kaiun' ), true ) ) {
+	} elseif ( in_array( $view, array( 'shukan', 'tsuki', 'kaiun', 'kichijitsu' ), true ) ) {
 		$cache = array( 'view' => $view );
 	} else {
 		$cache = array( 'view' => '404' );
@@ -199,6 +200,13 @@ function ut_view_meta( array $v ) {
 				'desc'  => '今週(' . $w['monday']->format( 'n月j日' ) . '〜)の12星座ランキング。1位は' . $w['list'][0]['name'] . '。星座ごとの今週のキーワードとラッキーデーも。',
 				'crumb' => array( array( '', '今週の12星座ランキング' ) ),
 			);
+		case 'kichijitsu':
+			$next = ut_next_kichijitsu( 'ichiryu', $today );
+			return array(
+				'title' => '開運日・吉日カレンダー|一粒万倍日・天赦日・寅の日',
+				'desc'  => '一粒万倍日・天赦日・寅の日・巳の日など、縁起の良い日を自動で計算。' . ( $next ? '次の一粒万倍日は' . ut_md_w( $next ) . '。' : '' ) . 'それぞれの意味と、この日にいいことも紹介します。',
+				'crumb' => array( array( '', '開運日・吉日カレンダー' ) ),
+			);
 		case 'kaiun':
 			return array(
 				'title' => '開運グッズ・お守りアイテム',
@@ -234,6 +242,8 @@ function ut_view_html( array $v ) {
 			return ut_moon_calendar_html();
 		case 'kaiun':
 			return ut_kaiun_page_html();
+		case 'kichijitsu':
+			return ut_kichijitsu_page_html();
 	}
 	return '';
 }
@@ -318,7 +328,7 @@ function ut_sign_page_html( $key ) {
 
 /** プラグインが用意する全ページのURL */
 function ut_all_view_urls() {
-	$urls = array( home_url( '/shukan/' ), home_url( '/tsuki/' ), home_url( '/aisho/' ), home_url( '/tanjobi/' ), home_url( '/kaiun/' ) );
+	$urls = array( home_url( '/shukan/' ), home_url( '/tsuki/' ), home_url( '/aisho/' ), home_url( '/tanjobi/' ), home_url( '/kaiun/' ), home_url( '/kichijitsu/' ) );
 	$keys = ut_sign_keys();
 	foreach ( $keys as $k ) {
 		$urls[] = ut_sign_url( $k );
