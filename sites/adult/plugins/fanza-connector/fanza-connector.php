@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FANZA Connector
  * Description: FANZA(DMM Webサービス API v3)から女優・作品情報を取得して表示する。トップの「イチオシ女優」は 設定 → FANZA連携 から差し替え可能。
- * Version: 0.4.0
+ * Version: 0.4.1
  * Requires PHP: 8.0
  *
  * ショートコード:
@@ -31,6 +31,7 @@ function fz_settings() {
 	$defaults = array(
 		'api_id'         => '',
 		'affiliate_id'   => '',
+		'link_affiliate_id' => '',
 		'cache_hours'    => 6,
 		'featured_title' => 'わたしのベスト5',
 		'featured'       => array(),
@@ -352,7 +353,7 @@ add_shortcode(
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		wp_enqueue_style( 'fanza-connector', plugins_url( 'assets/fanza.css', __FILE__ ), array(), '0.4.0' );
+		wp_enqueue_style( 'fanza-connector', plugins_url( 'assets/fanza.css', __FILE__ ), array(), '0.4.1' );
 	}
 );
 
@@ -381,6 +382,7 @@ function fz_sanitize( $input ) {
 	$out   = array(
 		'api_id'         => sanitize_text_field( $input['api_id'] ?? '' ),
 		'affiliate_id'   => preg_replace( '/[^A-Za-z0-9_-]/', '', $input['affiliate_id'] ?? '' ),
+		'link_affiliate_id' => preg_replace( '/[^A-Za-z0-9_-]/', '', $input['link_affiliate_id'] ?? '' ),
 		'cache_hours'    => max( 1, min( 48, (int) ( $input['cache_hours'] ?? 6 ) ) ),
 		'track_pages'    => max( 1, min( 20, (int) ( $input['track_pages'] ?? 5 ) ) ),
 		'featured_title' => sanitize_text_field( $input['featured_title'] ?? '' ),
@@ -506,6 +508,7 @@ function fz_render_settings_page() {
 			<table class="form-table">
 				<tr><th>API ID</th><td><input type="text" class="regular-text" name="<?php echo esc_attr( $name ); ?>[api_id]" value="<?php echo esc_attr( $s['api_id'] ); ?>"></td></tr>
 				<tr><th>アフィリエイトID</th><td><input type="text" class="regular-text" name="<?php echo esc_attr( $name ); ?>[affiliate_id]" value="<?php echo esc_attr( $s['affiliate_id'] ); ?>"><p class="description">API用のID(末尾が -990〜-999 のもの)</p></td></tr>
+				<tr><th>リンク用アフィリエイトID</th><td><input type="text" class="regular-text" placeholder="例: fanzpick-001" name="<?php echo esc_attr( $name ); ?>[link_affiliate_id]" value="<?php echo esc_attr( $s['link_affiliate_id'] ); ?>"><p class="description">サイトに表示するリンクに使うID(サイト登録で発行された、末尾が -001〜-989 のもの)。空欄なら上のAPI用IDのまま表示します。</p></td></tr>
 				<tr><th>価格記録の取得ページ数</th><td><input type="number" min="1" max="20" name="<?php echo esc_attr( $name ); ?>[track_pages]" value="<?php echo esc_attr( $s['track_pages'] ); ?>"> ページ(1ページ100作品。人気順で取得)</td></tr>
 				<tr><th>キャッシュ時間</th><td><input type="number" min="1" max="48" name="<?php echo esc_attr( $name ); ?>[cache_hours]" value="<?php echo esc_attr( $s['cache_hours'] ); ?>"> 時間</td></tr>
 			</table>
@@ -539,4 +542,30 @@ add_filter(
 		array_unshift( $links, '<a href="' . esc_url( admin_url( 'options-general.php?page=fanza-connector' ) ) . '">設定</a>' );
 		return $links;
 	}
+);
+
+/* ------------------------------------------------------------------
+ * 表示するリンクのアフィリエイトIDを差し替える
+ * APIはAPI用ID(-990〜-999)で呼ぶ必要があるが、返ってくるリンクにもそのIDが入る。
+ * 「リンク用アフィリエイトID」が設定されていれば、ページに出力する直前に差し替える。
+ * (値下げの記録などデータベースに保存した作品のリンクも、まとめて差し替わる)
+ * ------------------------------------------------------------------ */
+function fz_rewrite_affiliate_ids( $html ) {
+	$s    = fz_settings();
+	$api  = $s['affiliate_id'];
+	$link = $s['link_affiliate_id'] ?? '';
+	if ( '' === $api || '' === $link || $api === $link ) {
+		return $html;
+	}
+	return preg_replace( '/(af_id(?:=|%3D))' . preg_quote( $api, '/' ) . '(?![A-Za-z0-9_-])/', '${1}' . $link, $html );
+}
+
+add_action(
+	'template_redirect',
+	function () {
+		if ( ! is_admin() && ! wp_doing_ajax() ) {
+			ob_start( 'fz_rewrite_affiliate_ids' );
+		}
+	},
+	1
 );
