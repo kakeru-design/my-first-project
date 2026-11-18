@@ -64,3 +64,7 @@
 /* アダルトグッズ */
 .fz-goods-thumb { aspect-ratio: 1 / 1; background: #fff; }
 .fz-goods-thumb img { object-fit: contain; object-position: center; }
+
+/* 今週の注目女優 */
+.fz-card-badge-trend { background: var(--c-primary, #e64980); color: #fff; }
+.fz-card-comment b { color: var(--c-premium, #b8862b); }

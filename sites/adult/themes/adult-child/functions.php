@@ -47,6 +47,7 @@ add_action(
 			echo adult_child_intro_html(); // phpcs:ignore WordPress.Security.EscapeOutput
 		}
 		echo fz_featured_html(); // phpcs:ignore WordPress.Security.EscapeOutput
+		echo do_shortcode( '[fanza_trending period="week" count="5"]' );
 		echo do_shortcode( '[fanza_price_drops hits="8"]' );
 		echo do_shortcode( '[fanza_ending_soon hits="8"]' );
 		echo do_shortcode( '[fanza_items title="人気の作品" sub="いま売れている作品" sort="rank" hits="8"]' );

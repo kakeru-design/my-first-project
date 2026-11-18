@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FANZA Connector
  * Description: FANZA(DMM Webサービス API v3)から女優・作品情報を取得して表示する。トップの「イチオシ女優」は 設定 → FANZA連携 から差し替え可能。
- * Version: 0.3.0
+ * Version: 0.4.0
  * Requires PHP: 8.0
  *
  * ショートコード:
@@ -21,6 +21,7 @@ const FZ_PLUGIN_FILE  = __FILE__;
 
 require_once __DIR__ . '/includes/price-tracker.php';
 require_once __DIR__ . '/includes/goods.php';
+require_once __DIR__ . '/includes/trending.php';
 
 /* ==================================================================
  * 設定
@@ -31,7 +32,7 @@ function fz_settings() {
 		'api_id'         => '',
 		'affiliate_id'   => '',
 		'cache_hours'    => 6,
-		'featured_title' => '今月のイチオシ女優',
+		'featured_title' => 'わたしのベスト5',
 		'featured'       => array(),
 		'track_pages'    => 5,
 	);
@@ -170,7 +171,7 @@ function fz_featured_html() {
 	}
 
 	$out = '<section class="fz-featured">'
-		. fz_section_head_html( fz_settings()['featured_title'], '編集部おすすめの女優と代表作' )
+		. fz_section_head_html( fz_settings()['featured_title'], 'ファンズピックが推す、不動のベスト5' )
 		. '<div class="fz-featured-list">';
 
 	foreach ( $rows as $i => $row ) {
@@ -351,7 +352,7 @@ add_shortcode(
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		wp_enqueue_style( 'fanza-connector', plugins_url( 'assets/fanza.css', __FILE__ ), array(), '0.3.0' );
+		wp_enqueue_style( 'fanza-connector', plugins_url( 'assets/fanza.css', __FILE__ ), array(), '0.4.0' );
 	}
 );
 
