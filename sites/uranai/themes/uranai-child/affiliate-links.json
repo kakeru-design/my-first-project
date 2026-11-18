@@ -1,36 +1,34 @@
 {
-  "uranai-a": {
-    "name": "電話占いサービスA",
-    "url": "https://example.com/aff/uranai-a",
-    "rating": 4.6,
-    "catch": "TODO: 一言キャッチコピー(例: 初回特典が手厚く初心者向け)",
-    "features": ["TODO: 特徴1", "TODO: 特徴2", "TODO: 特徴3"],
-    "price": "TODO",
-    "bonus": "TODO",
-    "methods": "電話 / チャット",
-    "payments": "TODO",
-    "cta": "電話占いサービスAの公式サイトを見る"
+  "coconala-mail": {
+    "name": "ココナラ メール占い",
+    "url": "https://px.a8.net/svt/ejp?a8mat=4BGLS0+EBLENM+2PEO+1BO6EQ",
+    "catch": "文章でじっくり相談でき、あとから何度でも読み返せる",
+    "features": [
+      "メッセージやチャットで、自分のペースで相談できる",
+      "料金はサービスごとの固定制。占い師ごとに価格が表示されている",
+      "恋愛・仕事・結婚など、悩み別に占い師を探せる",
+      "占い師ごとに評価と口コミの件数を確認できる"
+    ],
+    "price": "1件ごとの固定料金(占い師ごとに設定。数百円台〜)",
+    "bonus": "会員登録で10%割引クーポン(2026年11月時点の公式サイト表示)",
+    "methods": "メッセージ・チャット",
+    "payments": "公式サイトでご確認ください",
+    "cta": "ココナラでメール占いを探す"
   },
-  "uranai-b": {
-    "name": "電話占いサービスB",
-    "url": "https://example.com/aff/uranai-b",
-    "rating": 4.3,
-    "catch": "TODO",
-    "features": ["TODO: 特徴1", "TODO: 特徴2"],
-    "price": "TODO",
-    "bonus": "TODO",
+  "coconala-tel": {
+    "name": "ココナラ 電話占い",
+    "url": "https://px.a8.net/svt/ejp?a8mat=4BGLS0+FBBEYA+2PEO+BXYEA",
+    "catch": "声で直接相談したい人に。占い師ごとの1分料金を見て選べる",
+    "features": [
+      "電話でその場で相談できる",
+      "料金は1分あたり。占い師ごとに価格が表示されている(2026年11月時点で約140〜500円/分)",
+      "恋愛・仕事・結婚など、悩み別に占い師を探せる",
+      "占い師ごとに評価と口コミの件数を確認できる"
+    ],
+    "price": "1分あたり約140〜500円(占い師ごとに設定)",
+    "bonus": "会員登録で10%割引クーポン(2026年11月時点の公式サイト表示)",
     "methods": "電話",
-    "payments": "TODO"
-  },
-  "uranai-c": {
-    "name": "チャット占いサービスC",
-    "url": "https://example.com/aff/uranai-c",
-    "rating": 4.0,
-    "catch": "TODO",
-    "features": ["TODO: 特徴1", "TODO: 特徴2"],
-    "price": "TODO",
-    "bonus": "TODO",
-    "methods": "チャット",
-    "payments": "TODO"
+    "payments": "公式サイトでご確認ください",
+    "cta": "ココナラで電話占いを探す"
   }
 }

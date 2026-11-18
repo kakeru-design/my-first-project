@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Uranai Tools
  * Description: 今日の12星座ランキング(毎日0時に自動更新)と、生年月日から診断する九星気学。
- * Version: 0.6.0
+ * Version: 0.6.2
  * Requires PHP: 8.0
  *
  * ショートコード:
@@ -254,11 +254,11 @@ function ut_kyusei_result_html( DateTimeImmutable $birth ) {
 
 	/* アップセル: 今は電話占いへの送客。手相・定期購読ができたらこのフックで差し替える。
 	 * 送客先の提携URLが未設定(仮置き)の間は表示しない。 */
-	$upsell_slug  = apply_filters( 'ut_upsell_slug', 'uranai-a' );
+	$upsell_slug  = apply_filters( 'ut_upsell_slug', 'coconala-mail' );
 	$upsell_ready = function_exists( 'atk_link' ) && atk_link( $upsell_slug ) && ! atk_is_placeholder( atk_link( $upsell_slug ) );
 	$out         .= ! $upsell_ready && ! has_filter( 'ut_kyusei_upsell_html' ) ? '' : apply_filters(
 		'ut_kyusei_upsell_html',
-		'<div class="ut-upsell"><p class="ut-upsell-title">もっと詳しく知りたい方へ</p>'
+		'<div class="ut-upsell"><p class="ut-upsell-title"><span class="atk-pr-label">PR</span>もっと詳しく知りたい方へ</p>'
 		. '<p>恋愛・仕事・人間関係など、あなたの具体的な悩みはプロの占い師に直接相談できます。</p>'
 		. ( function_exists( 'atk_button_html' ) ? atk_button_html( $upsell_slug, 'プロの占い師に相談してみる' ) : '' )
 		. '</div>',
@@ -284,7 +284,7 @@ add_filter(
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		wp_enqueue_style( 'uranai-tools', plugins_url( 'assets/uranai-tools.css', __FILE__ ), array(), '0.6.0' );
+		wp_enqueue_style( 'uranai-tools', plugins_url( 'assets/uranai-tools.css', __FILE__ ), array(), '0.6.2' );
 	}
 );
 
