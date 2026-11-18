@@ -42,11 +42,16 @@ add_action(
 			}
 			return;
 		}
+		// FANZA連携の設定前(審査中など)は、一般の閲覧者にサイトの紹介を表示する
+		if ( ! fz_is_configured() ) {
+			echo adult_child_intro_html(); // phpcs:ignore WordPress.Security.EscapeOutput
+		}
 		echo fz_featured_html(); // phpcs:ignore WordPress.Security.EscapeOutput
 		echo do_shortcode( '[fanza_price_drops hits="8"]' );
 		echo do_shortcode( '[fanza_ending_soon hits="8"]' );
 		echo do_shortcode( '[fanza_items title="人気の作品" sub="いま売れている作品" sort="rank" hits="8"]' );
 		echo do_shortcode( '[fanza_items title="新着作品" sub="最近配信された作品" sort="date" hits="8"]' );
+		echo do_shortcode( '[fanza_goods title="人気のアダルトグッズ" sub="FANZA通販で売れているグッズ" sort="rank" hits="8"]' );
 	}
 );
 
@@ -126,3 +131,21 @@ add_action(
 
 /* トップは主役コンテンツを最上部に出すため、サイト名の大きな帯は出さない(サイト名はヘッダーの h1) */
 add_filter( 'affiliate_base_show_hero', '__return_false' );
+
+/** サイトの紹介(FANZA連携の設定前にトップへ表示) */
+function adult_child_intro_html() {
+	$items = array(
+		array( '毎日の値下げ情報', '昨日より安くなった作品を毎日チェックしてまとめます。' ),
+		array( 'セール終了間近', '見逃したくないセールを、終わる前にお知らせします。' ),
+		array( 'イチオシ女優', '編集部が選んだ注目の女優と、その代表作を紹介します。' ),
+		array( '人気・新着作品', 'いま売れている作品と、最近配信された作品をまとめて見られます。' ),
+	);
+	$out  = '<section class="fz-intro"><h2 class="fz-section-title">ファンズピックについて</h2>';
+	$out .= '<p>ファンズピックは、FANZAの作品が好きなファンの目線で、セール・値下げ・おすすめ作品の情報をまとめる非公式の情報サイトです。作品情報は準備ができしだい、毎日自動で更新していきます。</p>';
+	$out .= '<ul class="fz-intro-list">';
+	foreach ( $items as [ $t, $d ] ) {
+		$out .= '<li><b>' . esc_html( $t ) . '</b><span>' . esc_html( $d ) . '</span></li>';
+	}
+	$out .= '</ul><p class="fz-intro-note">※当サイトはFANZA(DMM)の公式サイトではありません。価格やセール期間は変わることがあるため、購入前に販売ページでご確認ください。</p></section>';
+	return $out;
+}

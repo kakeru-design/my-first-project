@@ -2,7 +2,7 @@
 Theme Name: Adult Child
 Template: affiliate-base
 Description: アダルト系アフィリエイトサイト用の子テーマ(年齢確認ゲート付き)。
-Version: 0.1.0
+Version: 0.1.1
 Text Domain: adult-child
 */
 
@@ -69,3 +69,13 @@ html.age-gate-open { overflow: hidden; }
 .home .hero { padding: 16px 0 0; text-align: left; }
 .home .hero .hero-title { font-size: 1rem; color: var(--c-muted); font-weight: 500; }
 .home .hero p { font-size: .8rem; }
+
+/* サイトの紹介(FANZA連携の設定前) */
+.fz-intro { margin: 8px 0 32px; padding: 20px; border: 1px solid var(--c-border); border-radius: var(--radius); background: var(--c-surface); }
+.fz-intro p { margin: 0 0 12px; }
+.fz-intro-list { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 10px; }
+@media (min-width: 720px) { .fz-intro-list { grid-template-columns: repeat(2, 1fr); } }
+.fz-intro-list li { padding: 12px 14px; border-radius: 8px; background: var(--c-bg); border-left: 3px solid var(--c-premium); }
+.fz-intro-list b { display: block; color: var(--c-premium); margin-bottom: 2px; }
+.fz-intro-list span { font-size: .88rem; color: var(--c-muted); }
+.fz-intro-note { font-size: .78rem; color: var(--c-muted); margin: 0 !important; }

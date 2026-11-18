@@ -70,6 +70,8 @@ docker compose up -d
 [fanza_items actress_id="12345" sort="rank" hits="4"]
 [fanza_items keyword="キーワード" hits="8"]
 ```
+アダルトグッズ(FANZA通販)は `[fanza_goods title="人気のアダルトグッズ" sort="rank" hits="8"]`(`sort`: rank/date/review/price、`keyword`・`genre_id` で絞り込み)。トップの末尾に人気グッズを表示。
+
 API の結果は6時間キャッシュされ(設定で変更可)、API障害時は前回の結果を表示する。
 
 ### 今日の値下げ・割引率ランキング・終了間近

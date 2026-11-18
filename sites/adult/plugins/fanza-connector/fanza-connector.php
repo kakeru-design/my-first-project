@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FANZA Connector
  * Description: FANZA(DMM Webサービス API v3)から女優・作品情報を取得して表示する。トップの「イチオシ女優」は 設定 → FANZA連携 から差し替え可能。
- * Version: 0.1.0
+ * Version: 0.3.0
  * Requires PHP: 8.0
  *
  * ショートコード:
@@ -20,6 +20,7 @@ const FZ_API_BASE     = 'https://api.dmm.com/affiliate/v3/';
 const FZ_PLUGIN_FILE  = __FILE__;
 
 require_once __DIR__ . '/includes/price-tracker.php';
+require_once __DIR__ . '/includes/goods.php';
 
 /* ==================================================================
  * 設定
@@ -338,14 +339,19 @@ add_shortcode(
 			$args['article_id'] = preg_replace( '/\D/', '', $a['genre_id'] );
 		}
 		$head = $a['title'] ? fz_section_head_html( $a['title'], $a['sub'], $a['more'] ) : '';
-		return '<section class="fz-section">' . $head . fz_items_html( fz_items( $args ) ) . '</section>';
+		$items = fz_items( $args );
+		// 取得できない・0件のときは、一般の閲覧者には見出しごと出さない(管理者には案内を表示)
+		if ( ( is_wp_error( $items ) || ! $items ) && ! current_user_can( 'manage_options' ) ) {
+			return '';
+		}
+		return '<section class="fz-section">' . $head . fz_items_html( $items ) . '</section>';
 	}
 );
 
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		wp_enqueue_style( 'fanza-connector', plugins_url( 'assets/fanza.css', __FILE__ ), array(), '0.1.0' );
+		wp_enqueue_style( 'fanza-connector', plugins_url( 'assets/fanza.css', __FILE__ ), array(), '0.3.0' );
 	}
 );
 

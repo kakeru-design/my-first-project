@@ -27,7 +27,7 @@ add_filter(
 	}
 );
 
-/* トップページ: 12星座ランキング → 九星気学の診断 → 電話占いランキング */
+/* トップページ: 12星座ランキング → 九星気学の診断 → 占い相談サービス */
 add_action(
 	'affiliate_base_front_top',
 	function () {
@@ -41,15 +41,16 @@ add_action(
 			echo '<p class="atk-warning">Uranai Tools プラグインを有効化してください。</p>';
 		}
 		// 提携リンクが未設定(仮置き)の案件は一般の閲覧者に見せない。管理者には案内だけ出す。
-		$slugs = array( 'uranai-a', 'uranai-b', 'uranai-c' );
+		$slugs = array( 'coconala-mail', 'coconala-tel' );
 		$ready = function_exists( 'atk_link' )
 			? array_values( array_filter( $slugs, fn( $s ) => atk_link( $s ) && ! atk_is_placeholder( atk_link( $s ) ) ) )
 			: array();
 		if ( $ready ) {
-			echo '<h2 class="section-title">おすすめ電話占いランキング</h2>';
+			echo '<h2 class="section-title">プロの占い師に相談できるサービス</h2>';
+			echo '<p class="atk-pr-notice"><span class="atk-pr-label">PR</span>この枠はアフィリエイト広告です。料金や特典は変わることがあるため、申し込む前に公式サイトでご確認ください。</p>';
 			echo do_shortcode( '[aff_ranking slugs="' . esc_attr( implode( ',', $ready ) ) . '"]' );
 		} elseif ( current_user_can( 'edit_posts' ) ) {
-			echo '<p class="atk-warning">[管理者のみ表示] 電話占いランキングは、affiliate-links.json に提携URLを設定すると表示されます。</p>';
+			echo '<p class="atk-warning">[管理者のみ表示] 占い相談サービスの枠は、affiliate-links.json に提携URLを設定すると表示されます。</p>';
 		}
 		if ( shortcode_exists( 'uranai_reading_links' ) ) {
 			echo do_shortcode( '[uranai_reading_links]' );

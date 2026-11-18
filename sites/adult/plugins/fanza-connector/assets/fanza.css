@@ -60,3 +60,7 @@
 .fz-badge-prev { background: transparent; color: var(--c-muted, #888); font-weight: 400; border: 1px solid var(--c-border, #ccc); }
 .fz-badge-rank { background: var(--c-premium, #e9c27a); color: #1a1408; }
 .fz-badge-time { background: transparent; color: var(--c-sale, #e8590c); border: 1px solid var(--c-sale, #e8590c); }
+
+/* アダルトグッズ */
+.fz-goods-thumb { aspect-ratio: 1 / 1; background: #fff; }
+.fz-goods-thumb img { object-fit: contain; object-position: center; }
