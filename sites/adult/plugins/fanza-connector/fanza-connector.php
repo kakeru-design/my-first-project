@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FANZA Connector
  * Description: FANZA(DMM Webサービス API v3)から女優・作品情報を取得して表示する。トップの「イチオシ女優」は 設定 → FANZA連携 から差し替え可能。
- * Version: 0.4.1
+ * Version: 0.4.2
  * Requires PHP: 8.0
  *
  * ショートコード:
@@ -165,6 +165,22 @@ function fz_link_attrs() {
 	return 'rel="sponsored nofollow noopener" target="_blank"';
 }
 
+/**
+ * カード上部: 代表作のパッケージ画像(高解像度)を背景に、女優の顔写真(元が約125pxと小さいため)を丸く小さめに重ねる
+ */
+function fz_card_photo_html( $photo, $name, $item, $badge, $badge_class = '', $eager = false ) {
+	$cover = $item['imageURL']['large'] ?? '';
+	$out   = '<div class="fz-card-photo' . ( $cover ? '' : ' no-cover' ) . '">';
+	if ( $cover ) {
+		$out .= '<img class="fz-card-cover" src="' . esc_url( $cover ) . '" alt="" loading="' . ( $eager ? 'eager' : 'lazy' ) . '">';
+	}
+	$out .= '<span class="fz-card-badge ' . esc_attr( $badge_class ) . '">' . esc_html( $badge ) . '</span>';
+	if ( $photo ) {
+		$out .= '<img class="fz-card-face" src="' . esc_url( $photo ) . '" alt="' . esc_attr( $name ) . '" width="96" height="96" loading="' . ( $eager ? 'eager' : 'lazy' ) . '">';
+	}
+	return $out . '</div>';
+}
+
 function fz_featured_html() {
 	$rows = fz_featured_rows();
 	if ( ! $rows ) {
@@ -183,12 +199,8 @@ function fz_featured_html() {
 		$more    = $actress['listURL']['digital'] ?? ( $item['affiliateURL'] ?? '' );
 
 		$out .= '<article class="fz-card">';
-		$out .= '<div class="fz-card-photo">';
-		$out .= '<span class="fz-card-badge">PICK UP ' . ( $i + 1 ) . '</span>';
-		if ( $photo ) {
-			$out .= '<img src="' . esc_url( $photo ) . '" alt="' . esc_attr( $name ) . '" loading="' . ( $i < 2 ? 'eager' : 'lazy' ) . '">';
-		}
-		$out .= '</div><div class="fz-card-body">';
+		$out .= fz_card_photo_html( $photo, $name, $item, 'PICK UP ' . ( $i + 1 ), '', $i < 2 );
+		$out .= '<div class="fz-card-body">';
 		$out .= '<h3 class="fz-card-name">' . esc_html( $name ) . '</h3>';
 		if ( ! empty( $actress['ruby'] ) ) {
 			$out .= '<p class="fz-card-ruby">' . esc_html( $actress['ruby'] ) . '</p>';
@@ -353,7 +365,7 @@ add_shortcode(
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		wp_enqueue_style( 'fanza-connector', plugins_url( 'assets/fanza.css', __FILE__ ), array(), '0.4.1' );
+		wp_enqueue_style( 'fanza-connector', plugins_url( 'assets/fanza.css', __FILE__ ), array(), '0.4.2' );
 	}
 );
 
@@ -551,6 +563,8 @@ add_filter(
  * (値下げの記録などデータベースに保存した作品のリンクも、まとめて差し替わる)
  * ------------------------------------------------------------------ */
 function fz_rewrite_affiliate_ids( $html ) {
+	// DMMの画像は http で返ってくるので https にそろえる(混在コンテンツの警告を防ぐ)
+	$html = str_replace( array( 'http://pics.dmm.co.jp', 'http://pics.dmm.com', 'http://p.dmm.co.jp' ), array( 'https://pics.dmm.co.jp', 'https://pics.dmm.com', 'https://p.dmm.co.jp' ), $html );
 	$s    = fz_settings();
 	$api  = $s['affiliate_id'];
 	$link = $s['link_affiliate_id'] ?? '';

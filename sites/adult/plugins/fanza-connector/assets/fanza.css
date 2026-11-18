@@ -15,7 +15,7 @@
 .fz-card { scroll-snap-align: start; background: var(--c-surface, #f6f6f6); border: 1px solid var(--c-border, #ddd); border-radius: 14px; overflow: hidden; display: flex; flex-direction: column; }
 .fz-card-photo { position: relative; aspect-ratio: 3 / 4; background: var(--c-border, #ddd); }
 .fz-card-photo img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
-.fz-card-badge { position: absolute; z-index: 1; top: 10px; left: 10px; background: var(--c-premium, #e9c27a); color: #1a1408; font-size: .7rem; font-weight: 700; letter-spacing: .05em; padding: 3px 8px; border-radius: 4px; }
+.fz-card-badge { position: absolute; z-index: 2; top: 10px; left: 10px; background: var(--c-premium, #e9c27a); color: #1a1408; font-size: .7rem; font-weight: 700; letter-spacing: .05em; padding: 3px 8px; border-radius: 4px; }
 .fz-card-body { padding: 12px 14px 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
 .fz-card-name { margin: 0; font-size: 1.1rem; }
 .fz-card-ruby { margin: -8px 0 0; font-size: .72rem; color: var(--c-muted, #888); }
@@ -68,3 +68,12 @@
 /* 今週の注目女優 */
 .fz-card-badge-trend { background: var(--c-primary, #e64980); color: #fff; }
 .fz-card-comment b { color: var(--c-premium, #b8862b); }
+
+/* カード上部: 代表作の画像を背景に、顔写真を丸く重ねる(顔写真は元画像が小さいため拡大しない) */
+.fz-card-photo { aspect-ratio: auto; height: 170px; display: flex; align-items: flex-end; justify-content: center; overflow: visible; }
+.fz-card-photo::after { display: none !important; }
+.fz-card-cover { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: right center; filter: brightness(.55) saturate(1.1); }
+.fz-card-photo.no-cover { background: radial-gradient(ellipse at top, #3a2a50, var(--c-surface, #1c1826)); }
+.fz-card-face { position: relative; z-index: 1; width: 96px !important; height: 96px !important; border-radius: 50%; object-fit: cover; object-position: center 20%; border: 3px solid var(--c-premium, #e9c27a); box-shadow: 0 6px 18px rgb(0 0 0 / .45); transform: translateY(40%); background: var(--c-surface, #1c1826); }
+.fz-card-photo + .fz-card-body { padding-top: 48px; text-align: center; }
+.fz-card-photo + .fz-card-body .fz-card-item { text-align: left; }
