@@ -46,7 +46,7 @@ add_action(
 			? array_values( array_filter( $slugs, fn( $s ) => atk_link( $s ) && ! atk_is_placeholder( atk_link( $s ) ) ) )
 			: array();
 		if ( $ready ) {
-			echo '<h2 class="section-title">プロの占い師に相談できるサービス</h2>';
+			echo '<h2 class="section-title" id="soudan">プロの占い師に相談できるサービス</h2>';
 			echo '<p class="atk-pr-notice"><span class="atk-pr-label">PR</span>この枠はアフィリエイト広告です。料金や特典は変わることがあるため、申し込む前に公式サイトでご確認ください。</p>';
 			echo do_shortcode( '[aff_ranking slugs="' . esc_attr( implode( ',', $ready ) ) . '"]' );
 		} elseif ( current_user_can( 'edit_posts' ) ) {
