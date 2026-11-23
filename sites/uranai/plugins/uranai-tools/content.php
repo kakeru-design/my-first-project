@@ -303,6 +303,7 @@ function ut_reading_links_html() {
 		array( home_url( '/tanjobi/' ), '誕生日別の性格', '366日それぞれの性格と恋愛傾向' ),
 		array( home_url( '/tsuki/' ), '新月・満月カレンダー', '願い事と手放しのタイミング' ),
 		array( home_url( '/kaiun/' ), '開運グッズ', '天然石・お守り・星座別ラッキーアイテム' ),
+		array( home_url( '/kichijitsu/' ), '開運日・吉日カレンダー', '一粒万倍日・天赦日・寅の日を毎日お知らせ' ),
 	);
 	$out = '<section class="ut-reading"><h2 class="ut-title">読みもの</h2><ul class="ut-reading-list">';
 	foreach ( $items as [ $url, $title, $sub ] ) {
