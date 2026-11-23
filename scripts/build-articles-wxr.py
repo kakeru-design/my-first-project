@@ -23,7 +23,7 @@ spec.loader.exec_module(legal)
 
 SITES = {
     "uranai": {"title": "運勢日和", "url": "https://unsei-biyori.com", "category": ("kaiun-column", "開運コラム")},
-    "adult": {"title": "ファンズピック", "url": "https://fanz-pick.com", "category": ("guide", "FANZAの使い方")},
+    "adult": {"title": "ファンズピック", "url": "https://fanz-pick.com", "category": ("guide", "FANZAの使い方"), "dir": "fanza"},
 }
 
 
@@ -41,7 +41,7 @@ def build(site):
     cat_slug, cat_name = conf["category"]
     now = datetime.datetime.now()
     items = []
-    for n, path in enumerate(sorted((ROOT / "docs/articles" / site).glob("*.md")), start=1):
+    for n, path in enumerate(sorted((ROOT / "docs/articles" / conf.get("dir", site)).glob("*.md")), start=1):
         md = path.read_text()
         title = re.search(r"^#\s+(.+)$", md, re.M).group(1).strip()
         body = legal.md_to_html(md)
@@ -90,6 +90,8 @@ def build(site):
     out = ROOT / "dist" / f"{site}-articles.xml"
     out.parent.mkdir(exist_ok=True)
     out.write_text(xml)
+    if not items:
+        sys.exit(f"記事が見つかりません: docs/articles/{conf.get('dir', site)}/")
     print(f"-> {out.relative_to(ROOT)}")
 
 
