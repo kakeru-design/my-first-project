@@ -10,7 +10,7 @@
   - 運勢日和(https://unsei-biyori.com): 占いサイト。案内役は「鑑定師 月詠灯」。
   - ファンズピック(https://fanz-pick.com): FANZAのセール・値下げ情報サイト(成人向け)。
 - 2つのサイトは、SNS・アフィリエイト・アカウント・投稿で一切つなげない。
-- 詳しい構成は `README.md`、SNSの運用は `docs/sns/` を参照。
+- 詳しい構成は `README.md`、引き継ぎ資料(全体像・ルール・今の状況・次にやること)は `docs/HANDOFF.md`、SNSの運用は `docs/sns/` を参照。
 
 ## 作業の進め方
 - サイトへの反映は、`python3 scripts/build-zips.py` で `dist/` に作ったzipを、ユーザーがWordPressの管理画面からアップロードして行う。
