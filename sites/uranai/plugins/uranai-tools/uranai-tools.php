@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Uranai Tools
  * Description: 今日の12星座ランキング(毎日0時に自動更新)と、生年月日から診断する九星気学。
- * Version: 0.7.0
+ * Version: 0.8.0
  * Requires PHP: 8.0
  *
  * ショートコード:
@@ -285,7 +285,7 @@ add_filter(
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		wp_enqueue_style( 'uranai-tools', plugins_url( 'assets/uranai-tools.css', __FILE__ ), array(), '0.7.0' );
+		wp_enqueue_style( 'uranai-tools', plugins_url( 'assets/uranai-tools.css', __FILE__ ), array(), '0.8.0' );
 	}
 );
 

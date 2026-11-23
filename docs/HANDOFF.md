@@ -24,7 +24,7 @@
 shared/themes/affiliate-base/       共通の親テーマ(OGP・説明文・パンくず・カード等)        0.1.4
 shared/mu-plugins/affiliate-toolkit.php 共通プラグイン(PR表記・/go/リンク・ランキング・GA4・Amazon・問い合わせの迷惑メール対策)  0.3.1
 sites/uranai/themes/uranai-child/   運勢日和の子テーマ(affiliate-links.json に提携リンク)   0.1.5
-sites/uranai/plugins/uranai-tools/  運勢日和の機能すべて                                     0.7.0
+sites/uranai/plugins/uranai-tools/  運勢日和の機能すべて                                     0.8.0
 sites/adult/themes/adult-child/     ファンズピックの子テーマ(年齢確認ゲート・トップの並び)   0.1.4
 sites/adult/plugins/fanza-connector/ FANZA API連携(女優・作品・値下げ記録・グッズ・注目女優・女優別/ジャンル別ページ) 0.5.0
 scripts/build-zips.py               WordPressにアップロードするzipを dist/ に作る
@@ -39,8 +39,8 @@ docs/                               各種資料(下記)
 | `kyusei.php` | 節入り・本命星・月命星・宮・今月の吉方位/凶方位 |
 | `daily.php` | 今日のまとめ(ヒーロー)、星座ごとの詳しい運勢、新月満月(Meeus)、誕生日→星座、FAQ |
 | `moon.php` | 月齢・月相・輝面比・月のSVG・今月の満ち欠けカレンダー・上弦下弦 |
-| `kichijitsu.php` | 日の干支、一粒万倍日・天赦日・寅/巳/己巳/甲子の日、/kichijitsu/ ページ |
-| `pages.php` | 独自ページの共通ルーター(/seiza/ /aisho/ /tanjobi/ /shukan/ /tsuki/ /kaiun/ /kichijitsu/)、タイトル・説明文・canonical・サイトマップ(462件) |
+| `kichijitsu.php` | 日の干支、一粒万倍日・天赦日・寅/巳/己巳/甲子の日、/kichijitsu/ ページ、年別 /kichijitsu/{年}/・月別 /kichijitsu/{年}/{月}/(昨年〜来年) |
+| `pages.php` | 独自ページの共通ルーター(/seiza/ /aisho/ /tanjobi/ /shukan/ /tsuki/ /kaiun/ /kichijitsu/)、タイトル・説明文・canonical・サイトマップ(488件) |
 | `content.php` / `content-data.php` | 相性78・誕生日366・週間ランキング・新月満月一覧・読みもの |
 | `kaiun.php` / `kaiun-data.php` | 開運グッズ(Amazonリンク44品) |
 | `xpost.php` | 管理画面の「今日のSNS投稿文」(X・Threads・Instagram用、曜日ごとの紹介投稿、吉日・新月満月の告知) |
@@ -98,7 +98,7 @@ docs/                               各種資料(下記)
 - [ ] 運勢日和のSearch Console登録とサイトマップ送信(未確認)。
 
 ### 予定
-- [ ] 12月16日(水)は天赦日・一粒万倍日・甲子の日が重なる大吉日。`docs/sns/images/ichiryu-20261119-akari.png` のデザインで告知画像を作り、前日・当日に投稿。
+- [ ] 12月16日(水)は天赦日・一粒万倍日・甲子の日が重なる大吉日(今年最後の天赦日)。告知画像 `docs/sns/images/tensha-20261216.png` を前日・当日に投稿。
 - [ ] 12月9日 新月、12月24日 満月の投稿(管理画面に自動で投稿文が出る)。
 
 ### 改善の候補
