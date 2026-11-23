@@ -9,13 +9,16 @@
  *   /shukan/              今週の12星座ランキング
  *   /tsuki/               新月・満月カレンダー
  *   /kaiun/               開運グッズ
+ *   /kichijitsu/          開運日・吉日カレンダー
+ *   /kichijitsu/{年}/     年別の吉日一覧(昨年〜来年)
+ *   /kichijitsu/{年}/{月}/ 月別の吉日
  */
 
 defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/content.php';
 
-const UT_REWRITE_VERSION = '4';
+const UT_REWRITE_VERSION = '5';
 
 add_action(
 	'init',
@@ -29,6 +32,8 @@ add_action(
 		add_rewrite_rule( '^tsuki/?$', 'index.php?ut_view=tsuki', 'top' );
 		add_rewrite_rule( '^kaiun/?$', 'index.php?ut_view=kaiun', 'top' );
 		add_rewrite_rule( '^kichijitsu/?$', 'index.php?ut_view=kichijitsu', 'top' );
+		add_rewrite_rule( '^kichijitsu/([0-9]{4})/?$', 'index.php?ut_view=kichijitsu&ut_a=$matches[1]', 'top' );
+		add_rewrite_rule( '^kichijitsu/([0-9]{4})/([0-9]{1,2})/?$', 'index.php?ut_view=kichijitsu&ut_a=$matches[1]&ut_b=$matches[2]', 'top' );
 		// プラグインを入れ替えたとき(有効化フックが走らない)にも一度だけ反映する
 		if ( get_option( 'ut_rewrite_version' ) !== UT_REWRITE_VERSION ) {
 			flush_rewrite_rules( false );
@@ -71,6 +76,9 @@ function ut_view() {
 		$cache = ut_birthday_valid( $a, $b ) && ltrim( $a, '0' ) === $a && ltrim( $b, '0' ) === $b
 			? array( 'view' => 'tanjobi', 'a' => (int) $a, 'b' => (int) $b )
 			: array( 'view' => '404' );
+	} elseif ( 'kichijitsu' === $view && '' !== $a ) {
+		$ok = in_array( (int) $a, ut_kichi_years(), true ) && ( '' === $b || ( ctype_digit( $b ) && ltrim( $b, '0' ) === $b && (int) $b >= 1 && (int) $b <= 12 ) );
+		$cache = ! $ok ? array( 'view' => '404' ) : ( '' === $b ? array( 'view' => 'kichi-year', 'a' => (int) $a ) : array( 'view' => 'kichi-month', 'a' => (int) $a, 'b' => (int) $b ) );
 	} elseif ( in_array( $view, array( 'shukan', 'tsuki', 'kaiun', 'kichijitsu' ), true ) ) {
 		$cache = array( 'view' => $view );
 	} else {
@@ -98,6 +106,10 @@ function ut_view_url( array $v ) {
 			return ut_birthday_url( $v['a'], $v['b'] );
 		case 'tanjobi-index':
 			return home_url( '/tanjobi/' );
+		case 'kichi-year':
+			return ut_kichi_year_url( $v['a'] );
+		case 'kichi-month':
+			return ut_kichi_month_url( $v['a'], $v['b'] );
 		default:
 			return home_url( '/' . $v['view'] . '/' );
 	}
@@ -207,6 +219,24 @@ function ut_view_meta( array $v ) {
 				'desc'  => '一粒万倍日・天赦日・寅の日・巳の日など、縁起の良い日を自動で計算。' . ( $next ? '次の一粒万倍日は' . ut_md_w( $next ) . '。' : '' ) . 'それぞれの意味と、この日にいいことも紹介します。',
 				'crumb' => array( array( '', '開運日・吉日カレンダー' ) ),
 			);
+		case 'kichi-year':
+			$y    = $v['a'];
+			$by   = ut_kichi_by_type( ut_kichi_period( $y ) );
+			$tens = ut_kichi_dates_text( $by['tensha'] ?? array() );
+			return array(
+				'title' => $y . '年の天赦日・一粒万倍日はいつ?|開運日・吉日カレンダー',
+				'desc'  => $y . '年の天赦日は' . $tens . 'の' . count( $by['tensha'] ?? array() ) . '日。一粒万倍日(' . count( $by['ichiryu'] ?? array() ) . '日)・寅の日・巳の日・己巳の日・甲子の日と、吉日が重なる「最強開運日」も1年分まとめました。',
+				'crumb' => array( array( home_url( '/kichijitsu/' ), '開運日・吉日カレンダー' ), array( '', $y . '年' ) ),
+			);
+		case 'kichi-month':
+			$y  = $v['a'];
+			$m  = $v['b'];
+			$by = ut_kichi_by_type( ut_kichi_period( $y, $m ) );
+			return array(
+				'title' => $y . '年' . $m . '月の吉日|一粒万倍日・天赦日・寅の日カレンダー',
+				'desc'  => $y . '年' . $m . '月の一粒万倍日は' . ut_kichi_dates_text( $by['ichiryu'] ?? array() ) . '。' . ( ! empty( $by['tensha'] ) ? '天赦日は' . ut_kichi_dates_text( $by['tensha'] ) . '。' : '' ) . '寅の日・巳の日など' . $m . '月の開運日と、この日にいいことをまとめました。',
+				'crumb' => array( array( home_url( '/kichijitsu/' ), '開運日・吉日カレンダー' ), array( ut_kichi_year_url( $y ), $y . '年' ), array( '', $m . '月' ) ),
+			);
 		case 'kaiun':
 			return array(
 				'title' => '開運グッズ・お守りアイテム',
@@ -244,6 +274,10 @@ function ut_view_html( array $v ) {
 			return ut_kaiun_page_html();
 		case 'kichijitsu':
 			return ut_kichijitsu_page_html();
+		case 'kichi-year':
+			return ut_kichi_year_html( $v['a'] );
+		case 'kichi-month':
+			return ut_kichi_month_html( $v['a'], $v['b'] );
 	}
 	return '';
 }
@@ -329,6 +363,12 @@ function ut_sign_page_html( $key ) {
 /** プラグインが用意する全ページのURL */
 function ut_all_view_urls() {
 	$urls = array( home_url( '/shukan/' ), home_url( '/tsuki/' ), home_url( '/aisho/' ), home_url( '/tanjobi/' ), home_url( '/kaiun/' ), home_url( '/kichijitsu/' ) );
+	foreach ( array_slice( ut_kichi_years(), 1 ) as $y ) {
+		$urls[] = ut_kichi_year_url( $y );
+		for ( $m = 1; $m <= 12; $m++ ) {
+			$urls[] = ut_kichi_month_url( $y, $m );
+		}
+	}
 	$keys = ut_sign_keys();
 	foreach ( $keys as $k ) {
 		$urls[] = ut_sign_url( $k );

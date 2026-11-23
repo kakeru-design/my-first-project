@@ -225,7 +225,8 @@ function ut_kichijitsu_page_html() {
 		}
 		$out .= '</span></li>';
 	}
-	$out .= '</ul><p class="ut-note">※複数の吉日が重なる日や天赦日は、特に縁起が良いとされます。</p></section>';
+	$out .= '</ul><p class="ut-note">※複数の吉日が重なる日や天赦日は、特に縁起が良いとされます。</p>';
+	$out .= '<p class="ut-more"><a href="' . esc_url( ut_kichi_year_url( (int) $today->format( 'Y' ) + 1 ) ) . '">' . ( (int) $today->format( 'Y' ) + 1 ) . '年の天赦日・一粒万倍日を見る ›</a></p></section>';
 
 	// 解説
 	$out .= '<section><h2 class="ut-title">吉日の意味</h2>';
@@ -245,6 +246,219 @@ function ut_kichijitsu_page_html() {
 		$out .= '</div></div>';
 	}
 	$out .= '</section>';
+	$y    = (int) $today->format( 'Y' );
+	$out .= '<section><h2 class="ut-title">年ごと・月ごとの吉日カレンダー</h2>' . ut_kichi_year_nav_html( 0 );
+	$out .= '<p>' . $y . '年の月ごとの吉日</p>' . ut_kichi_month_nav_html( $y ) . '</section>';
 	$out .= '<p class="ut-note">※暦の吉日は、古くからの言い伝えにもとづく目安です。結果を保証するものではありません。六曜や不成就日など、旧暦にもとづく暦注はこのページでは扱っていません。</p>';
+	return $out . '</article>';
+}
+
+/* ==================================================================
+ * 年別・月別の吉日カレンダー
+ *   /kichijitsu/{年}/        その年の天赦日・一粒万倍日・寅の日…の一覧
+ *   /kichijitsu/{年}/{月}/   その月の吉日
+ * ================================================================== */
+
+/** ページを用意する年(昨年〜来年) */
+function ut_kichi_years() {
+	$y = (int) ut_today()->format( 'Y' );
+	return array( $y - 1, $y, $y + 1 );
+}
+
+function ut_kichi_year_url( $y ) {
+	return home_url( '/kichijitsu/' . (int) $y . '/' );
+}
+
+function ut_kichi_month_url( $y, $m ) {
+	return home_url( '/kichijitsu/' . (int) $y . '/' . (int) $m . '/' );
+}
+
+/**
+ * 期間の吉日(日付 => 種類の配列)
+ * @return array<int, array{date: DateTimeImmutable, hits: string[]}>
+ */
+function ut_kichi_period( $y, $m = 0 ) {
+	$from = new DateTimeImmutable( sprintf( '%04d-%02d-01 12:00', $y, $m ?: 1 ), wp_timezone() );
+	$to   = $m ? $from->modify( 'first day of next month' ) : $from->modify( '+1 year' );
+	return ut_kichijitsu_range( $from, (int) $from->diff( $to )->days );
+}
+
+/** 種類ごとに日付を集める */
+function ut_kichi_by_type( array $list ) {
+	$out = array();
+	foreach ( $list as $e ) {
+		foreach ( $e['hits'] as $k ) {
+			$out[ $k ][] = $e;
+		}
+	}
+	return $out;
+}
+
+/** 「天赦日+一粒万倍日」など、特に縁起が良いとされる日(天赦日、または3つ以上重なる日) */
+function ut_kichi_is_best( array $hits ) {
+	return in_array( 'tensha', $hits, true ) && in_array( 'ichiryu', $hits, true ) || count( $hits ) >= 3;
+}
+
+function ut_kichi_tags_html( array $hits ) {
+	$types = ut_kichijitsu_types();
+	$out   = '<span class="ut-kichi-tags">';
+	foreach ( $hits as $k ) {
+		$out .= '<span class="ut-kichi-tag tag-' . esc_attr( $k ) . '">' . esc_html( $types[ $k ]['name'] ) . '</span>';
+	}
+	return $out . '</span>';
+}
+
+/** 日付の一覧(リスト) */
+function ut_kichi_list_html( array $list ) {
+	$today = ut_today()->format( 'Ymd' );
+	$out   = '<ul class="ut-kichi-list">';
+	foreach ( $list as $e ) {
+		$cls  = ( $e['date']->format( 'Ymd' ) === $today ? 'is-today ' : '' ) . ( $e['date']->format( 'Ymd' ) < $today ? 'is-past ' : '' ) . ( in_array( 'tensha', $e['hits'], true ) || count( $e['hits'] ) >= 2 ? 'is-big' : '' );
+		$out .= '<li class="' . esc_attr( trim( $cls ) ) . '"><span class="ut-kichi-day">' . esc_html( ut_md_w( $e['date'] ) ) . '</span>' . ut_kichi_tags_html( $e['hits'] ) . '</li>';
+	}
+	return $out . '</ul>';
+}
+
+/** 日付を「1月5日(月)・1月17日(土)」のように並べる */
+function ut_kichi_dates_text( array $list ) {
+	return implode( '・', array_map( fn( $e ) => ut_md_w( $e['date'] ), $list ) );
+}
+
+/** 月の見出しリンク(1月〜12月) */
+function ut_kichi_month_nav_html( $y, $current = 0 ) {
+	$out = '<nav class="ut-kichi-months" aria-label="月ごとの吉日">';
+	for ( $m = 1; $m <= 12; $m++ ) {
+		$out .= $m === $current
+			? '<span class="is-current">' . $m . '月</span>'
+			: '<a href="' . esc_url( ut_kichi_month_url( $y, $m ) ) . '">' . $m . '月</a>';
+	}
+	return $out . '</nav>';
+}
+
+function ut_kichi_year_nav_html( $current ) {
+	$out = '<nav class="ut-kichi-years" aria-label="年ごとの吉日">';
+	foreach ( ut_kichi_years() as $y ) {
+		$out .= $y === $current
+			? '<span class="is-current">' . $y . '年</span>'
+			: '<a href="' . esc_url( ut_kichi_year_url( $y ) ) . '">' . $y . '年</a>';
+	}
+	return $out . '</nav>';
+}
+
+function ut_kichi_year_html( $y ) {
+	$types = ut_kichijitsu_types();
+	$list  = ut_kichi_period( $y );
+	$by    = ut_kichi_by_type( $list );
+	$best  = array_values( array_filter( $list, fn( $e ) => ut_kichi_is_best( $e['hits'] ) ) );
+
+	$out  = '<article class="ut-article ut-kichi">';
+	$out .= '<h1 class="ut-page-title">' . (int) $y . '年の開運日・吉日カレンダー</h1>';
+	$out .= '<p>' . (int) $y . '年の天赦日・一粒万倍日・寅の日・巳の日・己巳の日・甲子の日を、1年分まとめました。始めごとやお財布の新調、目標を書き出す日を選ぶ参考にしてくださいね。</p>';
+	$out .= ut_kichi_year_nav_html( $y );
+
+	// まとめ
+	$out .= '<section class="ut-kichi-summary"><h2 class="ut-title">' . (int) $y . '年の吉日の回数</h2><dl class="ut-today-list">';
+	foreach ( $types as $k => $t ) {
+		$out .= '<div><dt><a href="#y-' . esc_attr( $k ) . '">' . esc_html( $t['name'] ) . '</a></dt><dd>' . count( $by[ $k ] ?? array() ) . '日</dd></div>';
+	}
+	$out .= '</dl></section>';
+
+	// 天赦日
+	$out .= '<section id="y-tensha"><h2 class="ut-title">' . (int) $y . '年の天赦日(' . count( $by['tensha'] ?? array() ) . '日)</h2>';
+	$out .= '<p>' . esc_html( $types['tensha']['text'] ) . '</p>';
+	$out .= ut_kichi_list_html( $by['tensha'] ?? array() ) . '</section>';
+
+	// 最強の開運日
+	if ( $best ) {
+		$out .= '<section id="y-best"><h2 class="ut-title">' . (int) $y . '年の「最強開運日」</h2>';
+		$out .= '<p>天赦日と一粒万倍日が重なる日や、3つ以上の吉日が重なる日は、特に縁起が良いとされ「最強開運日」と呼ばれることもあります。</p>';
+		$out .= ut_kichi_list_html( $best ) . '</section>';
+	}
+
+	// 月ごとの一粒万倍日
+	$out .= '<section id="y-ichiryu"><h2 class="ut-title">' . (int) $y . '年の一粒万倍日(' . count( $by['ichiryu'] ?? array() ) . '日)</h2>';
+	$out .= '<p>' . esc_html( $types['ichiryu']['text'] ) . '</p><table class="ut-kichi-table"><tbody>';
+	$months = array();
+	foreach ( $by['ichiryu'] ?? array() as $e ) {
+		$months[ (int) $e['date']->format( 'n' ) ][] = $e;
+	}
+	foreach ( $months as $m => $es ) {
+		$out .= '<tr><th><a href="' . esc_url( ut_kichi_month_url( $y, $m ) ) . '">' . $m . '月</a></th><td>' . esc_html( implode( '・', array_map( fn( $e ) => $e['date']->format( 'j日' ) . '(' . ut_weekday( $e['date'] ) . ')', $es ) ) ) . '</td></tr>';
+	}
+	$out .= '</tbody></table></section>';
+
+	// そのほか
+	foreach ( array( 'tora', 'tsuchinotomi', 'mi', 'kinoene' ) as $k ) {
+		$es   = $by[ $k ] ?? array();
+		$out .= '<section id="y-' . esc_attr( $k ) . '"><h2 class="ut-title">' . (int) $y . '年の' . esc_html( $types[ $k ]['name'] ) . '(' . count( $es ) . '日)</h2>';
+		$out .= '<p>' . esc_html( $types[ $k ]['text'] ) . '</p>';
+		$out .= '<p class="ut-kichi-dates">' . esc_html( ut_kichi_dates_text( $es ) ) . '</p></section>';
+	}
+
+	$out .= '<section><h2 class="ut-title">月ごとの吉日カレンダー</h2>' . ut_kichi_month_nav_html( $y ) . '</section>';
+	$out .= '<p class="ut-more"><a href="' . esc_url( home_url( '/kichijitsu/' ) ) . '">今日の吉日・これからの吉日を見る ›</a></p>';
+	$out .= '<p class="ut-note">※日付は、節入り(立春・立夏など)を区切りとする暦の決まりにもとづいて計算しています。暦の吉日は古くからの言い伝えにもとづく目安で、結果を保証するものではありません。六曜や不成就日など旧暦にもとづく暦注は扱っていません。</p>';
+	return $out . '</article>';
+}
+
+function ut_kichi_month_html( $y, $m ) {
+	$types = ut_kichijitsu_types();
+	$list  = ut_kichi_period( $y, $m );
+	$by    = ut_kichi_by_type( $list );
+	$best  = array_values( array_filter( $list, fn( $e ) => in_array( 'tensha', $e['hits'], true ) || count( $e['hits'] ) >= 2 ) );
+
+	$out  = '<article class="ut-article ut-kichi">';
+	$out .= '<h1 class="ut-page-title">' . (int) $y . '年' . (int) $m . '月の吉日カレンダー</h1>';
+	$out .= '<p>' . (int) $y . '年' . (int) $m . '月の一粒万倍日・天赦日・寅の日・巳の日などの開運日をまとめました。</p>';
+	$out .= ut_kichi_month_nav_html( $y, $m );
+
+	// ひと目でわかる要約
+	$out .= '<section class="ut-kichi-today"><p class="ut-kichi-date">' . (int) $y . '年' . (int) $m . '月</p>';
+	if ( $best ) {
+		$out .= '<p class="ut-kichi-head">いちばんの吉日は <b>' . esc_html( ut_md_w( $best[0]['date'] ) ) . '</b></p>';
+		$out .= '<p>' . esc_html( implode( '・', array_map( fn( $k ) => $types[ $k ]['name'], $best[0]['hits'] ) ) ) . 'が重なる日です。</p>';
+	} else {
+		$out .= '<p class="ut-kichi-head">一粒万倍日は <b>' . count( $by['ichiryu'] ?? array() ) . '日</b></p>';
+	}
+	$out .= '</section>';
+
+	$out .= '<section><h2 class="ut-title">' . (int) $m . '月の吉日一覧</h2>' . ut_kichi_list_html( $list ) . '</section>';
+
+	$out .= '<section><h2 class="ut-title">' . (int) $m . '月の吉日 早見表</h2><table class="ut-kichi-table"><tbody>';
+	foreach ( $types as $k => $t ) {
+		$es   = $by[ $k ] ?? array();
+		$out .= '<tr><th><a href="' . esc_url( home_url( '/kichijitsu/' ) ) . '#' . esc_attr( $k ) . '">' . esc_html( $t['name'] ) . '</a></th><td>'
+			. ( $es ? esc_html( implode( '・', array_map( fn( $e ) => $e['date']->format( 'j日' ) . '(' . ut_weekday( $e['date'] ) . ')', $es ) ) ) : 'なし' ) . '</td></tr>';
+	}
+	$out .= '</tbody></table></section>';
+
+	if ( $best ) {
+		$out .= '<section><h2 class="ut-title">' . (int) $m . '月の特に縁起が良い日</h2>';
+		foreach ( $best as $e ) {
+			$out .= '<div class="ut-kichi-card"><div class="ut-kichi-icons">' . ut_kichijitsu_svg( $e['hits'][0], 56 ) . '</div><div>';
+			$out .= '<h3>' . esc_html( ut_md_w( $e['date'] ) ) . '</h3>' . ut_kichi_tags_html( $e['hits'] );
+			$do   = array_unique( array_map( fn( $k ) => $types[ $k ]['do'], $e['hits'] ) );
+			$out .= '<p class="ut-kichi-do"><b>この日にいいこと</b>' . esc_html( implode( '・', $do ) ) . '</p>';
+			if ( in_array( 'ichiryu', $e['hits'], true ) ) {
+				$out .= '<p class="ut-kichi-dont"><b>控えたいこと</b>' . esc_html( $types['ichiryu']['dont'] ) . '</p>';
+			}
+			$out .= '</div></div>';
+		}
+		$out .= '</section>';
+	}
+
+	// 前後の月
+	$prev = ( new DateTimeImmutable( sprintf( '%04d-%02d-01', $y, $m ) ) )->modify( '-1 month' );
+	$next = ( new DateTimeImmutable( sprintf( '%04d-%02d-01', $y, $m ) ) )->modify( '+1 month' );
+	$out .= '<nav class="ut-kichi-pager">';
+	if ( in_array( (int) $prev->format( 'Y' ), ut_kichi_years(), true ) ) {
+		$out .= '<a href="' . esc_url( ut_kichi_month_url( $prev->format( 'Y' ), $prev->format( 'n' ) ) ) . '">‹ ' . esc_html( $prev->format( 'Y年n月' ) ) . '</a>';
+	}
+	$out .= '<a href="' . esc_url( ut_kichi_year_url( $y ) ) . '">' . (int) $y . '年の一覧</a>';
+	if ( in_array( (int) $next->format( 'Y' ), ut_kichi_years(), true ) ) {
+		$out .= '<a href="' . esc_url( ut_kichi_month_url( $next->format( 'Y' ), $next->format( 'n' ) ) ) . '">' . esc_html( $next->format( 'Y年n月' ) ) . ' ›</a>';
+	}
+	$out .= '</nav>';
+	$out .= '<p class="ut-note">※日付は、節入り(立春・立夏など)を区切りとする暦の決まりにもとづいて計算しています。暦の吉日は古くからの言い伝えにもとづく目安で、結果を保証するものではありません。</p>';
 	return $out . '</article>';
 }

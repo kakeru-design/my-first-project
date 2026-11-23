@@ -245,3 +245,20 @@
 .ut-kichi-do b, .ut-kichi-dont b, .ut-kichi-next b { display: inline-block; margin-right: 6px; font-size: .75rem; color: var(--c-primary, #5f3dc4); }
 .ut-kichi-dont b { color: #c92a2a; }
 .ut-kichi-next b { color: inherit; font-size: .88rem; }
+
+/* 年別・月別の吉日カレンダー */
+.ut-kichi-years, .ut-kichi-months { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 20px; }
+.ut-kichi-years a, .ut-kichi-years span, .ut-kichi-months a, .ut-kichi-months span { display: inline-block; min-width: 3.4em; text-align: center; padding: 6px 10px; border-radius: 999px; border: 1px solid var(--c-border, #ddd); background: var(--c-bg, #fff); color: inherit; text-decoration: none; font-size: .85rem; }
+.ut-kichi-years .is-current, .ut-kichi-months .is-current { background: #2b1a4a; border-color: #2b1a4a; color: #f3d36b; font-weight: 700; }
+.ut-kichi-list li.is-past { opacity: .5; }
+.ut-kichi-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
+.ut-kichi-table th, .ut-kichi-table td { border-bottom: 1px solid var(--c-border, #ddd); padding: 8px 6px; text-align: left; vertical-align: top; line-height: 1.7; }
+.ut-kichi-table th { white-space: nowrap; width: 6.5em; }
+.ut-kichi-dates { font-size: .88rem; line-height: 1.9; }
+.ut-kichi-pager { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin: 24px 0 8px; font-size: .9rem; }
+.ut-kichi-card .ut-kichi-icons { flex: none; }
+.ut-kichi-card .ut-kichi-tags { margin: 4px 0; }
+.ut-kichi-summary dl { display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 0; }
+.ut-kichi-summary dl > div { display: block !important; text-align: center; padding: 10px 4px; border: 1px solid var(--c-border, #ddd); border-radius: var(--radius, 10px); }
+.ut-kichi-summary dt { font-size: .78rem; margin: 0; }
+.ut-kichi-summary dd { margin: 2px 0 0; font-weight: 700; font-size: 1.1rem; }

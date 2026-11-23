@@ -30,7 +30,7 @@ add_filter(
 );
 
 /* ------------------------------------------------------------------
- * トップページ: イチオシ女優(常に最上部) → 今日の値下げ → 終了間近 → 人気作品 → 新着作品
+ * トップページ: イチオシ女優(常に最上部) → 注目女優 → 今日の値下げ → 終了間近 → 人気作品 → 新着作品 → グッズ → 女優・ジャンルから探す
  * イチオシ女優は 設定 → FANZA連携 から差し替える。
  * ------------------------------------------------------------------ */
 add_action(
@@ -53,6 +53,7 @@ add_action(
 		echo do_shortcode( '[fanza_items title="人気の作品" sub="いま売れている作品" sort="rank" hits="8"]' );
 		echo do_shortcode( '[fanza_items title="新着作品" sub="最近配信された作品" sort="date" hits="8"]' );
 		echo do_shortcode( '[fanza_goods title="人気のアダルトグッズ" sub="FANZA通販で売れているグッズ" sort="rank" hits="8"]' );
+		echo do_shortcode( '[fanza_browse]' );
 	}
 );
 

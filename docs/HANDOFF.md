@@ -22,11 +22,11 @@
 ## 2. リポジトリの構成
 ```
 shared/themes/affiliate-base/       共通の親テーマ(OGP・説明文・パンくず・カード等)        0.1.4
-shared/mu-plugins/affiliate-toolkit.php 共通プラグイン(PR表記・/go/リンク・ランキング・GA4・Amazon)  0.3.0
+shared/mu-plugins/affiliate-toolkit.php 共通プラグイン(PR表記・/go/リンク・ランキング・GA4・Amazon・問い合わせの迷惑メール対策)  0.3.1
 sites/uranai/themes/uranai-child/   運勢日和の子テーマ(affiliate-links.json に提携リンク)   0.1.5
-sites/uranai/plugins/uranai-tools/  運勢日和の機能すべて                                     0.7.0
-sites/adult/themes/adult-child/     ファンズピックの子テーマ(年齢確認ゲート・トップの並び)   0.1.3
-sites/adult/plugins/fanza-connector/ FANZA API連携(女優・作品・値下げ記録・グッズ・注目女優) 0.4.2
+sites/uranai/plugins/uranai-tools/  運勢日和の機能すべて                                     0.8.0
+sites/adult/themes/adult-child/     ファンズピックの子テーマ(年齢確認ゲート・トップの並び)   0.1.4
+sites/adult/plugins/fanza-connector/ FANZA API連携(女優・作品・値下げ記録・グッズ・注目女優・女優別/ジャンル別ページ) 0.5.0
 scripts/build-zips.py               WordPressにアップロードするzipを dist/ に作る
 scripts/build-legal-wxr.py          docs/legal の原稿から固定ページの取り込みファイル(WXR)を作る
 docs/                               各種資料(下記)
@@ -39,8 +39,8 @@ docs/                               各種資料(下記)
 | `kyusei.php` | 節入り・本命星・月命星・宮・今月の吉方位/凶方位 |
 | `daily.php` | 今日のまとめ(ヒーロー)、星座ごとの詳しい運勢、新月満月(Meeus)、誕生日→星座、FAQ |
 | `moon.php` | 月齢・月相・輝面比・月のSVG・今月の満ち欠けカレンダー・上弦下弦 |
-| `kichijitsu.php` | 日の干支、一粒万倍日・天赦日・寅/巳/己巳/甲子の日、/kichijitsu/ ページ |
-| `pages.php` | 独自ページの共通ルーター(/seiza/ /aisho/ /tanjobi/ /shukan/ /tsuki/ /kaiun/ /kichijitsu/)、タイトル・説明文・canonical・サイトマップ(462件) |
+| `kichijitsu.php` | 日の干支、一粒万倍日・天赦日・寅/巳/己巳/甲子の日、/kichijitsu/ ページ、年別 /kichijitsu/{年}/・月別 /kichijitsu/{年}/{月}/(昨年〜来年) |
+| `pages.php` | 独自ページの共通ルーター(/seiza/ /aisho/ /tanjobi/ /shukan/ /tsuki/ /kaiun/ /kichijitsu/)、タイトル・説明文・canonical・サイトマップ(488件) |
 | `content.php` / `content-data.php` | 相性78・誕生日366・週間ランキング・新月満月一覧・読みもの |
 | `kaiun.php` / `kaiun-data.php` | 開運グッズ(Amazonリンク44品) |
 | `xpost.php` | 管理画面の「今日のSNS投稿文」(X・Threads・Instagram用、曜日ごとの紹介投稿、吉日・新月満月の告知) |
@@ -53,6 +53,7 @@ docs/                               各種資料(下記)
 | `includes/price-tracker.php` | 毎朝5時に価格を記録(カスタムテーブル)、今日の値下げ・割引率ランキング・終了間近 |
 | `includes/goods.php` | FANZA通販のアダルトグッズ(service=mono, floor=goods) |
 | `includes/trending.php` | 今週の注目女優(人気上位100本の出演数で自動選出、ベスト5は除外) |
+| `includes/pages.php` | 女優別 `/actress/{ID}/`・ジャンル別 `/genre/{ID}/` のページと一覧、トップの「女優から探す・ジャンルから探す」、サイトマップ。対象は登録簿(ベスト5+人気上位100本に出た女優・ジャンルが毎週たまる) |
 
 ## 3. 反映の手順(デプロイ)
 1. コードを変更したら、**そのテーマ・プラグインのバージョン番号を上げる**(テーマは style.css の `Version`、プラグインはヘッダーの `Version` と CSS の enqueue のバージョン)。
@@ -91,19 +92,19 @@ docs/                               各種資料(下記)
 
 ## 7. 次にやること
 ### 確認・対応待ち
-- [ ] ファンズピックの「今日の値下げ」が表示されていない。価格の自動取得(WP-Cron・毎朝5時)が動いているか、管理画面の取得状況と赤い注意書きで確認する。必要ならサーバーのCronで `wp-cron.php` を定期実行する。
+- [ ] ファンズピックの「今日の値下げ」が表示されていない(0.5.0 から、値下げがない日は「いまセール中の作品」を代わりに表示)。価格の自動取得(WP-Cron・毎朝5時)が動いているか、管理画面の取得状況と赤い注意書きで確認する。必要ならサーバーのCronで `wp-cron.php` を定期実行する。
 - [ ] ファンズピックのリンク(af_id=fanzpick-001)がFANZAで有効か、実際に押して確認する。
 - [ ] DMMの規約で、ドメイン名「fanz」の扱いを確認する。
 - [ ] 運勢日和のSearch Console登録とサイトマップ送信(未確認)。
 
 ### 予定
-- [ ] 12月16日(水)は天赦日・一粒万倍日・甲子の日が重なる大吉日。`docs/sns/images/ichiryu-20261119-akari.png` のデザインで告知画像を作り、前日・当日に投稿。
+- [ ] 12月16日(水)は天赦日・一粒万倍日・甲子の日が重なる大吉日(今年最後の天赦日)。告知画像 `docs/sns/images/tensha-20261216.png` を前日・当日に投稿。
 - [ ] 12月9日 新月、12月24日 満月の投稿(管理画面に自動で投稿文が出る)。
 
 ### 改善の候補
 - [ ] 記事(人が書いた解説記事)を追加する。例: 一粒万倍日にやるといいこと/電話占いとメール占いの違い/FANZAのセールの種類と買い方。
 - [ ] 電話占いの提携先を増やす(A8でヴェルニ・ミラー等に申請)→ 比較ランキングに。
-- [ ] ファンズピックに女優別・ジャンル別の一覧ページ、MGS動画・DUGAの追加。
+- [ ] ファンズピックにMGS動画・DUGAの追加。(女優別・ジャンル別ページは 0.5.0 で追加済み)
 - [ ] 両サイトのセキュリティ(2段階認証・自動更新・バックアップ確認)。
 
 ### やらないと決めたこと
