@@ -80,7 +80,7 @@ function fz_trending_html( $atts = array() ) {
 		$out .= '<article class="fz-card">';
 		$out .= fz_card_photo_html( $photo, $name, $item, ( 'day' === $period ? '今日' : '今週' ) . 'の注目 ' . ( $i + 1 ), 'fz-card-badge-trend' );
 		$out .= '<div class="fz-card-body">';
-		$out .= '<h3 class="fz-card-name">' . esc_html( $name ) . '</h3>';
+		$out .= '<h3 class="fz-card-name">' . fz_actress_link_html( $t['id'], $name ) . '</h3>';
 		if ( ! empty( $actress['ruby'] ) ) {
 			$out .= '<p class="fz-card-ruby">' . esc_html( $actress['ruby'] ) . '</p>';
 		}

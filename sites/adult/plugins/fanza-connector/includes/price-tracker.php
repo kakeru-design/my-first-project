@@ -419,7 +419,18 @@ add_shortcode(
 		$a     = fz_pt_atts( $atts, '今日の値下げ', '前回より安くなった作品(' . fz_pt_date_label( $snap['date'] ) . ')' );
 		$drops = array_slice( fz_pt_drops( $snap['rows'], $snap['prev'] ), 0, $a['hits'] );
 		if ( ! $drops ) {
-			return fz_admin_notice_html( '前回の記録より値下げされた作品はありません(記録が1日分だけの場合は、翌日以降に表示されます)。' );
+			// 値下げがない日も枠が消えないように、割引率の高いセール作品を代わりに出す
+			$list = array_slice( fz_pt_discount_ranking( $snap['rows'] ), 0, $a['hits'] );
+			if ( ! $list ) {
+				return fz_admin_notice_html( '前回の記録より値下げされた作品も、割引中の作品もありません。' );
+			}
+			$a['title'] = 'いまセール中の作品';
+			$a['sub']   = '定価から安くなっている順(' . fz_pt_date_label( $snap['date'] ) . ')';
+			$cards      = array();
+			foreach ( $list as $r ) {
+				$cards[] = fz_item_card_html( $r['item'], '<span class="fz-badge fz-badge-drop">' . (int) $r['off'] . '%OFF</span>' );
+			}
+			return fz_admin_notice_html( '今日は前回より値下げされた作品がないため、セール中の作品を表示しています。' ) . fz_pt_section_html( $a, $cards );
 		}
 		$cards = array();
 		foreach ( $drops as $r ) {

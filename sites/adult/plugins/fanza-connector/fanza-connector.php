@@ -2,7 +2,7 @@
 /**
  * Plugin Name: FANZA Connector
  * Description: FANZA(DMM Webサービス API v3)から女優・作品情報を取得して表示する。トップの「イチオシ女優」は 設定 → FANZA連携 から差し替え可能。
- * Version: 0.4.2
+ * Version: 0.5.0
  * Requires PHP: 8.0
  *
  * ショートコード:
@@ -10,6 +10,9 @@
  *   [fanza_items sort="rank" hits="12"]              作品一覧(人気順)
  *   [fanza_items actress_id="12345" sort="date"]     特定女優の新着作品
  *   [fanza_items keyword="キーワード" hits="8"]       キーワード検索
+ *   [fanza_browse]                                    女優から探す・ジャンルから探す
+ *
+ * ページ: /actress/ /actress/{女優ID}/ /genre/ /genre/{ジャンルID}/(includes/pages.php)
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -22,6 +25,7 @@ const FZ_PLUGIN_FILE  = __FILE__;
 require_once __DIR__ . '/includes/price-tracker.php';
 require_once __DIR__ . '/includes/goods.php';
 require_once __DIR__ . '/includes/trending.php';
+require_once __DIR__ . '/includes/pages.php';
 
 /* ==================================================================
  * 設定
@@ -201,7 +205,7 @@ function fz_featured_html() {
 		$out .= '<article class="fz-card">';
 		$out .= fz_card_photo_html( $photo, $name, $item, 'PICK UP ' . ( $i + 1 ), '', $i < 2 );
 		$out .= '<div class="fz-card-body">';
-		$out .= '<h3 class="fz-card-name">' . esc_html( $name ) . '</h3>';
+		$out .= '<h3 class="fz-card-name">' . ( ! empty( $row['actress_id'] ) ? fz_actress_link_html( $row['actress_id'], $name ) : esc_html( $name ) ) . '</h3>';
 		if ( ! empty( $actress['ruby'] ) ) {
 			$out .= '<p class="fz-card-ruby">' . esc_html( $actress['ruby'] ) . '</p>';
 		}
@@ -365,7 +369,7 @@ add_shortcode(
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		wp_enqueue_style( 'fanza-connector', plugins_url( 'assets/fanza.css', __FILE__ ), array(), '0.4.2' );
+		wp_enqueue_style( 'fanza-connector', plugins_url( 'assets/fanza.css', __FILE__ ), array(), '0.5.0' );
 	}
 );
 
