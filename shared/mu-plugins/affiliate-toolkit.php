@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Affiliate Toolkit
  * Description: 2サイト共通のアフィリエイト機能(PR表記・リンク管理・ボタン・ランキング)。mu-plugins に設置して使う。
- * Version: 0.3.0
+ * Version: 0.3.1
  *
  * 案件データはテーマ側で `atk_links` フィルタから渡す(子テーマの affiliate-links.json)。
  *   [aff_button slug="xxx"]            … CTAボタン
@@ -367,5 +367,26 @@ add_action(
 		if ( atk_amazon_tag() ) {
 			echo '<p>Amazonのアソシエイトとして、当サイトは適格販売により収入を得ています。</p>';
 		}
+	}
+);
+
+/* ------------------------------------------------------------------
+ * お問い合わせ(Contact Form 7)の迷惑メール対策
+ * 日本語(ひらがな・カタカナ)を1文字も含まない送信は迷惑メールとして扱う。
+ * 海外からの「検索エンジン登録」などの営業・詐欺メールの多くはこれで止まる。
+ * ------------------------------------------------------------------ */
+add_filter(
+	'wpcf7_spam',
+	function ( $spam ) {
+		if ( $spam ) {
+			return $spam;
+		}
+		$text = '';
+		foreach ( $_POST as $key => $value ) { // phpcs:ignore WordPress.Security.NonceVerification
+			if ( is_string( $value ) && 0 !== strpos( (string) $key, '_wpcf7' ) ) {
+				$text .= ' ' . wp_unslash( $value );
+			}
+		}
+		return ! preg_match( '/[\x{3041}-\x{3096}\x{30A1}-\x{30FA}]/u', $text );
 	}
 );

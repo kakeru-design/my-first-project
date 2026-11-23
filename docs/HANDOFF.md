@@ -22,7 +22,7 @@
 ## 2. リポジトリの構成
 ```
 shared/themes/affiliate-base/       共通の親テーマ(OGP・説明文・パンくず・カード等)        0.1.4
-shared/mu-plugins/affiliate-toolkit.php 共通プラグイン(PR表記・/go/リンク・ランキング・GA4・Amazon)  0.3.0
+shared/mu-plugins/affiliate-toolkit.php 共通プラグイン(PR表記・/go/リンク・ランキング・GA4・Amazon・問い合わせの迷惑メール対策)  0.3.1
 sites/uranai/themes/uranai-child/   運勢日和の子テーマ(affiliate-links.json に提携リンク)   0.1.5
 sites/uranai/plugins/uranai-tools/  運勢日和の機能すべて                                     0.7.0
 sites/adult/themes/adult-child/     ファンズピックの子テーマ(年齢確認ゲート・トップの並び)   0.1.4
