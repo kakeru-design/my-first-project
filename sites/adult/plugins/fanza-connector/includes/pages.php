@@ -171,7 +171,11 @@ function fz_view() {
 	} elseif ( 'genre' === $view && '' === $id ) {
 		$cache = array( 'view' => 'genre-index' );
 	} elseif ( 'actress' === $view && ctype_digit( $id ) ) {
-		$a     = fz_actress( $id );
+		$a = fz_actress( $id );
+		// APIが一時的に答えないときも、登録簿にある女優ならページを出す(検索エンジンに404を返さない)
+		if ( ! $a && isset( $reg['actress'][ $id ] ) && '' !== $reg['actress'][ $id ]['name'] ) {
+			$a = array( 'name' => $reg['actress'][ $id ]['name'], 'ruby' => $reg['actress'][ $id ]['ruby'] );
+		}
 		$cache = $a
 			? array( 'view' => 'actress', 'id' => $id, 'data' => $a, 'indexed' => isset( $reg['actress'][ $id ] ) )
 			: array( 'view' => '404' );
