@@ -26,7 +26,7 @@ shared/mu-plugins/affiliate-toolkit.php 共通プラグイン(PR表記・/go/リ
 sites/uranai/themes/uranai-child/   運勢日和の子テーマ(affiliate-links.json に提携リンク)   0.1.5
 sites/uranai/plugins/uranai-tools/  運勢日和の機能すべて                                     0.8.0
 sites/adult/themes/adult-child/     ファンズピックの子テーマ(年齢確認ゲート・トップの並び)   0.1.4
-sites/adult/plugins/fanza-connector/ FANZA API連携(女優・作品・値下げ記録・グッズ・注目女優・女優別/ジャンル別ページ) 0.5.0
+sites/adult/plugins/fanza-connector/ FANZA API連携(女優・作品・値下げ記録・グッズ・注目女優・女優別/ジャンル別ページ) 0.5.1
 scripts/build-zips.py               WordPressにアップロードするzipを dist/ に作る
 scripts/build-legal-wxr.py          docs/legal の原稿から固定ページの取り込みファイル(WXR)を作る
 scripts/build-articles-wxr.py       docs/articles の記事原稿から投稿の取り込みファイル(WXR)を作る
